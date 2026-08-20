@@ -1,0 +1,39 @@
+# Artefak build
+build/
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.packages
+.pub-cache/
+.pub/
+
+# Model TFLite: lisensi model pra-latih bervariasi dan ukurannya beberapa
+# MB. Lihat assets/models/README.md untuk cara memperolehnya.
+assets/models/*.tflite
+
+# Kunci penandatanganan Android. Yang bocor berarti orang lain dapat
+# menerbitkan APK yang diterima Play Store sebagai aplikasi ini.
+android/key.properties
+android/app/*.jks
+android/app/*.keystore
+*.jks
+*.keystore
+
+# Bawaan Flutter
+android/.gradle/
+android/local.properties
+android/app/debug/
+android/app/profile/
+android/app/release/
+ios/Pods/
+ios/.symlinks/
+ios/Flutter/Flutter.framework
+ios/Flutter/Flutter.podspec
+ios/Flutter/Generated.xcconfig
+ios/Flutter/flutter_export_environment.sh
+
+.idea/
+.vscode/
+*.iml
+Thumbs.db
+.DS_Store

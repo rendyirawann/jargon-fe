@@ -1,0 +1,19 @@
+# Hasil build lokal — beberapa ratus MB, dan akan dibangun ulang di dalam
+# image. Menyalinnya ke build context membuat `docker build` menghabiskan
+# waktu lebih lama mengirim konteks daripada mengompilasi.
+build/
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+
+# Platform yang tidak dipakai build web.
+android/
+ios/
+linux/
+macos/
+windows/
+
+.idea/
+.vscode/
+*.iml
+.git/
