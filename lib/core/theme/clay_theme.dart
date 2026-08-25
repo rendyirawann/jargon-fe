@@ -9,9 +9,23 @@ import 'package:flutter/material.dart';
 ///
 /// Konsekuensi yang perlu dijaga di seluruh aplikasi:
 ///
+/// Palet ini **GELAP** — biru malam. Dua hal berubah dibanding versi terang,
+/// dan keduanya bukan sekadar menukar angka warna:
+///
+/// * **Bayangan terang harus sangat tipis.** Pada latar terang, highlight
+///   kiri-atas nyaris putih penuh. Nilai yang sama di atas latar gelap
+///   terlihat seperti garis tepi menyala, dan seluruh kesan tanah liat
+///   hilang. Sebaliknya bayangan gelapnya harus lebih PEKAT, karena bayangan
+///   tipis di atas latar gelap tidak menghasilkan kedalaman apa pun.
+/// * **Pasangan "soft" jadi lebih gelap, bukan lebih muda.** `primarySoft`
+///   dan kawan-kawannya dipakai sebagai latar lencana; versi pastel di atas
+///   latar gelap membuat teks di dalamnya kehilangan kontras.
+///
 /// * **Kontras teks tidak boleh ikut melunak.** Latar lembut menggoda untuk
 ///   memakai teks abu-abu muda, dan hasilnya tidak terbaca di layar ponsel
-///   murah di bawah sinar matahari. Warna teks di sini sengaja tetap pekat.
+///   murah di bawah sinar matahari. Di mode gelap godaannya terbalik —
+///   abu-abu tua yang "kalem" di atas latar gelap sama-sama tidak terbaca.
+///   Warna teks di sini sengaja tetap pekat kontrasnya.
 /// * **Bayangan bukan hiasan, melainkan penanda status.** Elemen yang bisa
 ///   ditekan timbul (bayangan keluar); elemen yang sedang aktif atau berupa
 ///   isian tenggelam (bayangan ke dalam). Bila keduanya dipakai sembarangan,
@@ -23,38 +37,53 @@ class ClayTheme {
   // Palet
   // ---------------------------------------------------------------
 
-  /// Latar utama — sedikit keunguan supaya bayangan putih terlihat.
-  /// Latar putih murni membuat highlight kiri-atas hilang sama sekali.
-  static const Color background = Color(0xFFEFF1FA);
+  /// Latar utama — biru malam. Bukan hitam netral: bayangan terang pada
+  /// claymorphism gelap adalah biru yang lebih muda, dan di atas latar
+  /// hitam murni bayangan itu terlihat seperti kabut kelabu, bukan cahaya.
+  static const Color background = Color(0xFF131A2E);
 
-  /// Permukaan kartu. Sengaja hanya sedikit lebih terang dari [background]:
-  /// perbedaan warna yang besar akan membuat kartu tampak "ditempel", bukan
-  /// "dibentuk dari" latar.
-  static const Color surface = Color(0xFFF4F6FD);
+  /// Permukaan kartu. Tetap hanya SEDIKIT lebih terang dari [background] —
+  /// aturan yang sama seperti versi terang, dan alasannya juga sama:
+  /// selisih warna yang besar membuat kartu tampak ditempel, bukan dibentuk
+  /// dari latarnya.
+  static const Color surface = Color(0xFF1B2540);
 
-  static const Color primary = Color(0xFF6C5CE7);
-  static const Color primarySoft = Color(0xFFE7E3FF);
-  static const Color secondary = Color(0xFF00B8A9);
+  /// Biru aksen. Pada latar gelap warna utama harus LEBIH terang dari latar,
+  /// bukan lebih gelap — biru tua di atas biru malam akan hilang sama
+  /// sekali, terutama pada layar ponsel murah di bawah sinar matahari.
+  static const Color primary = Color(0xFF4C7DF0);
 
-  static const Color success = Color(0xFF2FBF71);
-  static const Color successSoft = Color(0xFFDCF6E8);
-  static const Color warning = Color(0xFFF5A524);
-  static const Color warningSoft = Color(0xFFFDEFD8);
-  static const Color danger = Color(0xFFE5484D);
-  static const Color dangerSoft = Color(0xFFFBE3E4);
-  static const Color info = Color(0xFF3E8FF5);
-  static const Color infoSoft = Color(0xFFDFEBFE);
+  /// Pasangan "soft" pada mode gelap adalah versi LEBIH GELAP dan pekat,
+  /// bukan lebih muda. Dipakai sebagai latar lencana dan chip.
+  static const Color primarySoft = Color(0xFF22315C);
+  static const Color secondary = Color(0xFF2DD4BF);
 
-  static const Color textStrong = Color(0xFF232640);
-  static const Color textBody = Color(0xFF4A4E69);
-  static const Color textMuted = Color(0xFF878BA8);
+  static const Color success = Color(0xFF34D399);
+  static const Color successSoft = Color(0xFF17362F);
+  static const Color warning = Color(0xFFFBBF24);
+  static const Color warningSoft = Color(0xFF3A2E14);
+  static const Color danger = Color(0xFFF87171);
+  static const Color dangerSoft = Color(0xFF3B1D22);
+  static const Color info = Color(0xFF60A5FA);
+  static const Color infoSoft = Color(0xFF16294A);
 
-  /// Bayangan gelap: arah cahaya diasumsikan dari kiri-atas.
-  static const Color shadowDark = Color(0x2E9AA5C8);
+  /// Kontras teks tetap TIDAK dilunakkan, sama seperti versi terang.
+  /// Godaannya di mode gelap justru terbalik: memakai abu-abu tua yang
+  /// "kalem" di atas latar gelap, dan hasilnya sama-sama tidak terbaca.
+  static const Color textStrong = Color(0xFFE8ECF8);
+  static const Color textBody = Color(0xFFB4BCD4);
+  static const Color textMuted = Color(0xFF7C87A6);
 
-  /// Bayangan terang. Nyaris putih penuh — inilah yang memberi kesan
-  /// permukaan lunak yang "menggembung".
-  static const Color shadowLight = Color(0xF2FFFFFF);
+  /// Bayangan gelap: arah cahaya tetap diasumsikan dari kiri-atas.
+  /// Lebih pekat daripada versi terang — pada latar gelap, bayangan tipis
+  /// tidak menghasilkan kedalaman apa pun.
+  static const Color shadowDark = Color(0x8C060A16);
+
+  /// Bayangan terang. Di sini justru harus SANGAT tipis: putih pekat yang
+  /// dipakai versi terang akan terlihat seperti garis tepi menyala, dan
+  /// seluruh kesan tanah liat hilang. Yang dipakai biru muda ber-alpha
+  /// rendah, sekadar menandai sisi yang menghadap cahaya.
+  static const Color shadowLight = Color(0x1F7C93D6);
 
   // ---------------------------------------------------------------
   // Ukuran
@@ -65,6 +94,18 @@ class ClayTheme {
   static const double radius = 26;
   static const double radiusSmall = 18;
   static const double radiusPill = 999;
+
+  /// Ukuran ikon baku.
+  ///
+  /// Dijadikan konstanta, bukan angka yang ditulis ulang di tiap layar,
+  /// supaya "ikon jangan besar-besar" tidak pelan-pelan hilang setiap kali
+  /// ada layar baru. Ikon besar pada tampilan minimalis membuat setiap
+  /// elemen berebut perhatian, dan tidak ada lagi yang menonjol.
+  static const double icon = 18;
+  static const double iconSmall = 15;
+
+  /// Hanya untuk keadaan kosong / ilustrasi, bukan untuk tombol dan menu.
+  static const double iconIllustration = 34;
 
   /// Bayangan "timbul" untuk elemen yang bisa ditekan.
   static List<BoxShadow> raised({double depth = 1}) => [
@@ -99,24 +140,33 @@ class ClayTheme {
   // ---------------------------------------------------------------
 
   static ThemeData build() {
-    const scheme = ColorScheme.light(
+    // ColorScheme.dark, bukan .light dengan warna gelap: banyak widget
+    // Material memilih warna turunannya sendiri berdasarkan `brightness`.
+    // Memakai .light dengan palet gelap membuat widget yang tidak kita
+    // gambar sendiri — menu popup, pemilih tanggal, kursor teks — tetap
+    // memakai warna terang dan tampak seperti bug.
+    const scheme = ColorScheme.dark(
       primary: primary,
       onPrimary: Colors.white,
       primaryContainer: primarySoft,
-      onPrimaryContainer: primary,
+      onPrimaryContainer: textStrong,
       secondary: secondary,
-      onSecondary: Colors.white,
+      onSecondary: Color(0xFF06231F),
       error: danger,
-      onError: Colors.white,
+      onError: Color(0xFF3B1D22),
       surface: surface,
       onSurface: textStrong,
     );
 
     return ThemeData(
       useMaterial3: true,
+      brightness: Brightness.dark,
       colorScheme: scheme,
       scaffoldBackgroundColor: background,
       canvasColor: background,
+
+      // Ukuran ikon baku dipasang di tema, bukan diulang per layar.
+      iconTheme: const IconThemeData(color: textBody, size: icon),
 
       // Semua elevasi Material dimatikan: kedalaman pada claymorphism datang
       // dari bayangan ganda yang digambar sendiri, bukan dari elevation.
@@ -126,7 +176,7 @@ class ClayTheme {
         elevation: 0,
         scrolledUnderElevation: 0,
         centerTitle: false,
-        iconTheme: IconThemeData(color: textStrong),
+        iconTheme: IconThemeData(color: textStrong, size: icon),
         titleTextStyle: TextStyle(
           color: textStrong,
           fontSize: 19,
@@ -153,10 +203,15 @@ class ClayTheme {
           borderRadius: BorderRadius.vertical(top: Radius.circular(radius)),
         ),
       ),
+      // Latar snackbar TIDAK boleh memakai `textStrong` seperti pada versi
+      // terang: di mode gelap warna itu hampir putih, dan teks putih di
+      // atasnya menjadi tidak terbaca sama sekali. Dipakai satu tingkat
+      // lebih terang dari `surface` supaya tetap terbaca sebagai lapisan
+      // yang mengapung di atas isi halaman.
       snackBarTheme: SnackBarThemeData(
         behavior: SnackBarBehavior.floating,
-        backgroundColor: textStrong,
-        contentTextStyle: const TextStyle(color: Colors.white, fontSize: 13.5),
+        backgroundColor: const Color(0xFF283557),
+        contentTextStyle: const TextStyle(color: textStrong, fontSize: 13.5),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(radiusSmall),
         ),
@@ -192,13 +247,13 @@ class ClayTheme {
       ),
 
       dividerTheme: const DividerThemeData(
-        color: Color(0x1A9AA5C8),
+        color: Color(0x1FFFFFFF),
         thickness: 1,
         space: 1,
       ),
       progressIndicatorTheme: const ProgressIndicatorThemeData(
         color: primary,
-        linearTrackColor: Color(0x229AA5C8),
+        linearTrackColor: Color(0x1A7C93D6),
       ),
     );
   }
@@ -213,13 +268,16 @@ class ClayTheme {
         _ => textMuted,
       };
 
+  /// Latar lencana status. Pada mode gelap nilainya adalah versi PEKAT dari
+  /// warna statusnya, bukan versi pastel — pastel di atas latar gelap
+  /// membuat teks di dalam lencana kehilangan kontras.
   static Color statusSoft(String status) => switch (status) {
         'hadir' => successSoft,
         'terlambat' => warningSoft,
         'izin' || 'dispensasi' => infoSoft,
-        'sakit' => const Color(0xFFD9F6F3),
+        'sakit' => const Color(0xFF10332F),
         'alfa' => dangerSoft,
-        _ => const Color(0xFFE8EAF2),
+        _ => const Color(0xFF232D48),
       };
 
   static String statusLabel(String status) => switch (status) {
@@ -236,7 +294,7 @@ class ClayTheme {
   /// Warna untuk tingkat keparahan pengaduan.
   static Color severityColor(String severity) => switch (severity) {
         'darurat' => danger,
-        'tinggi' => const Color(0xFFEE6B2F),
+        'tinggi' => const Color(0xFFFB923C),
         'sedang' => warning,
         _ => info,
       };

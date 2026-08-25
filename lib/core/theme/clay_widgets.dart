@@ -533,11 +533,20 @@ class ClayNavBar extends StatelessWidget {
     required this.items,
     required this.currentIndex,
     required this.onSelected,
+    this.onMenuTap,
   });
 
   final List<ClayNavItem> items;
   final int currentIndex;
   final ValueChanged<int> onSelected;
+
+  /// Tombol menu di ujung kiri bilah.
+  ///
+  /// Ditaruh DI DALAM bilah yang mengapung, bukan di AppBar, supaya tetap
+  /// terjangkau saat halaman digulir jauh ke bawah — AppBar ikut hilang,
+  /// bilah ini tidak. Bila null, tombolnya tidak digambar sama sekali dan
+  /// bilahnya kembali seperti semula.
+  final VoidCallback? onMenuTap;
 
   @override
   Widget build(BuildContext context) {
@@ -549,7 +558,9 @@ class ClayNavBar extends StatelessWidget {
           radius: ClayTheme.radiusPill,
           padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
           child: Row(
-            children: List.generate(items.length, (i) {
+            children: [
+              if (onMenuTap != null) _MenuToggle(onTap: onMenuTap!),
+              ...List.generate(items.length, (i) {
               final selected = i == currentIndex;
               final item = items[i];
 
@@ -622,8 +633,46 @@ class ClayNavBar extends StatelessWidget {
                   ),
                 ),
               );
-            }),
+              }),
+            ],
           ),
+        ),
+      ),
+    );
+  }
+}
+
+/// Tombol menu di dalam bilah mengapung.
+///
+/// Sengaja BUKAN ikon hamburger tiga garis: yang dibuka bukan sidebar yang
+/// menggeser layar, melainkan panel yang muncul dari bawah. Ikon petak
+/// memberi harapan yang benar tentang apa yang akan terjadi.
+class _MenuToggle extends StatelessWidget {
+  const _MenuToggle({required this.onTap});
+
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onTap: onTap,
+      child: Container(
+        // Lebar tetap, tidak Expanded: tombol ini tidak boleh menyusut
+        // ketika jumlah tab bertambah, karena ia satu-satunya jalan ke
+        // menu lain.
+        width: 46,
+        height: 46,
+        margin: const EdgeInsets.only(right: 2),
+        alignment: Alignment.center,
+        decoration: BoxDecoration(
+          color: ClayTheme.primarySoft,
+          borderRadius: BorderRadius.circular(ClayTheme.radiusPill),
+        ),
+        child: const Icon(
+          Icons.grid_view_rounded,
+          size: ClayTheme.icon,
+          color: ClayTheme.primary,
         ),
       ),
     );
@@ -651,7 +700,13 @@ void showClaySnack(BuildContext context, String message, {bool error = false}) {
     ..showSnackBar(
       SnackBar(
         content: Text(message),
-        backgroundColor: error ? ClayTheme.danger : ClayTheme.textStrong,
+        // Latar netral diambil dari tema, BUKAN dari `ClayTheme.textStrong`.
+        // Pada palet gelap warna itu hampir putih, sehingga teksnya menjadi
+        // putih di atas putih — pesan galat yang tidak terbaca adalah
+        // kegagalan yang lebih buruk daripada tidak ada pesan sama sekali.
+        backgroundColor: error
+            ? ClayTheme.danger
+            : Theme.of(context).snackBarTheme.backgroundColor,
         duration: Duration(seconds: error ? 5 : 3),
       ),
     );

@@ -10,6 +10,32 @@
     <!-- Layar kios harus tetap menyala selama jam absensi. -->
     <uses-permission android:name="android.permission.WAKE_LOCK" />
 
+    <!--
+      Lokasi untuk widget beranda. COARSE disertakan bersama FINE, bukan
+      sebagai pengganti: sejak Android 12 pengguna dapat memberi izin
+      "perkiraan lokasi" saja, dan tanpa COARSE terdaftar pilihan itu
+      dianggap penolakan sehingga widgetnya kosong tanpa alasan yang jelas.
+
+      Keduanya TIDAK berjalan di latar belakang - lokasi hanya diambil saat
+      beranda terbuka. Karena itu ACCESS_BACKGROUND_LOCATION sengaja tidak
+      diminta: izin itu memicu peninjauan khusus di Play Store dan tidak ada
+      satu pun fitur di sini yang membutuhkannya.
+    -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+
+    <!--
+      Media. Android 13 (API 33) memecah READ_EXTERNAL_STORAGE menjadi izin
+      per jenis berkas. Keduanya harus ada: yang baru untuk Android 13+, yang
+      lama dibatasi maxSdkVersion="32" agar tidak diminta pada versi yang
+      sudah tidak memakainya - permintaan izin usang membuat pengguna melihat
+      dialog yang tidak bisa mereka penuhi.
+    -->
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
+    <uses-permission
+        android:name="android.permission.READ_EXTERNAL_STORAGE"
+        android:maxSdkVersion="32" />
+
     <!-- Kamera depan diperlukan untuk mode kios, tetapi aplikasi tetap
          berguna tanpa kamera pada ponsel guru yang hanya memantau, sehingga
          ditandai tidak wajib agar tidak tersaring di Play Store. -->

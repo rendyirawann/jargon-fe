@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../core/theme/clay_theme.dart';
 import '../../core/theme/clay_widgets.dart';
 import '../../data/jargon_models.dart';
+import 'waktu_lokasi_card.dart';
 
 /// Beranda: satu layar yang menjawab pertanyaan paling sering ditanya
 /// pengguna hari itu.
@@ -29,6 +30,12 @@ class BerandaTab extends StatelessWidget {
       child: ListView(
         padding: const EdgeInsets.fromLTRB(20, 8, 20, 28),
         children: [
+          // Tanggal, jam, dan lokasi. Ditaruh paling atas karena inilah yang
+          // dipakai memastikan perangkat dan jam sekolah sudah benar sebelum
+          // melihat data absensi di bawahnya.
+          const WaktuLokasiCard(),
+          const SizedBox(height: 6),
+
           // --- Kartu absensi per siswa yang tertaut ---
           if (s.students.isNotEmpty) ...[
             const _SectionLabel('Absensi Hari Ini'),

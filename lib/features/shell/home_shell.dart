@@ -10,7 +10,9 @@ import '../absensi/absensi_screen.dart';
 import '../berkas/berkas_screen.dart';
 import '../panic/panic_feed_screen.dart';
 import 'beranda_tab.dart';
+import 'menu_panel.dart';
 import 'profile_screen.dart';
+import 'server_settings_screen.dart';
 
 /// Kerangka utama Jargon GO: beranda + tiga menu.
 ///
@@ -187,7 +189,49 @@ class _HomeShellState extends ConsumerState<HomeShell> {
               items: tabs.items,
               currentIndex: index,
               onSelected: (i) => setState(() => _index = i),
+              onMenuTap: () => _bukaPanelMenu(tabs.items, index),
             ),
     );
+  }
+
+  /// Buka panel menu dari bawah.
+  ///
+  /// Isinya diturunkan dari `tabs.items` yang sama dengan bilah bawah, bukan
+  /// daftar terpisah. Dua daftar yang harus dijaga sinkron akan berbeda pada
+  /// perubahan berikutnya, dan panel menu yang menampilkan menu yang tidak
+  /// dimiliki akun adalah kebocoran informasi, bukan sekadar salah tampil.
+  Future<void> _bukaPanelMenu(List<ClayNavItem> items, int aktif) async {
+    final pilihan = await showMenuPanel(
+      context: context,
+      aktif: aktif,
+      menu: [
+        for (final it in items)
+          MenuPanelItem(
+            icon: it.activeIcon,
+            label: it.label,
+            badge: it.badge,
+          ),
+      ],
+      lainnya: [
+        MenuPanelItem(
+          icon: Icons.person_outline_rounded,
+          label: 'Profil Saya',
+          keterangan: 'Lengkapi data diri',
+          onTap: () => Navigator.of(context).push(
+            MaterialPageRoute(builder: (_) => const ProfileScreen()),
+          ),
+        ),
+        MenuPanelItem(
+          icon: Icons.dns_outlined,
+          label: 'Alamat Server',
+          keterangan: 'Untuk pengujian jaringan sekolah',
+          onTap: () => Navigator.of(context).push(
+            MaterialPageRoute(builder: (_) => const ServerSettingsScreen()),
+          ),
+        ),
+      ],
+    );
+
+    if (pilihan != null && mounted) setState(() => _index = pilihan);
   }
 }
