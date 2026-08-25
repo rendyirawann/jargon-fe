@@ -69,6 +69,24 @@ class ApiClient {
   final Dio _dio;
   final Storage _storage;
 
+  /// Dipanggil ketika sesi pengguna benar-benar berakhir dan penyegaran token
+  /// tidak menolong lagi.
+  ///
+  /// Disetel dari luar (lihat `main.dart`) alih-alih memanggil Riverpod dari
+  /// sini: `apiClientProvider` berada di BAWAH `currentUserProvider` dalam graf
+  /// provider, jadi membaca provider itu dari dalam kelas ini akan melingkar.
+  void Function()? onSessionExpired;
+
+  /// Penyegaran yang sedang berjalan, bila ada.
+  ///
+  /// Sepuluh request paralel yang semuanya kena 401 harus menghasilkan SATU
+  /// penyegaran, bukan sepuluh. Ini bukan soal efisiensi: server MEROTASI
+  /// refresh token, jadi penyegaran pertama yang berhasil mencabut token yang
+  /// sedang dipakai sembilan lainnya. Kesembilan itu lalu gagal dan memaksa
+  /// login ulang padahal sesinya sehat — bug yang muncul hanya saat beranda
+  /// memuat beberapa hal sekaligus, yaitu tepat saat aplikasi dibuka.
+  Future<bool>? _refreshing;
+
   /// GET yang mengembalikan objek `data`.
   Future<Map<String, dynamic>> getObject(
     String path, {
@@ -172,7 +190,43 @@ class ApiClient {
 
   // ---------------------------------------------------------------
 
+  /// Kirim request, dan bila access token sudah kedaluwarsa: segarkan lalu
+  /// ulangi SEKALI.
+  ///
+  /// MENGAPA DI SINI, BUKAN DI INTERCEPTOR onError
+  ///
+  /// Klien ini menyetel `validateStatus = (_) => true`, sehingga 401 bukan
+  /// error bagi Dio melainkan respons biasa. Interceptor `onError` tidak akan
+  /// pernah terpanggil untuk 401 — memasang penyegaran di sana menghasilkan
+  /// kode yang terlihat benar dan tidak pernah berjalan.
+  ///
+  /// Access token berumur satu jam (`ACCESS_TOKEN_TTL_SECS` di server). Tanpa
+  /// penyegaran, setiap pengguna terkunci di luar tepat sejam setelah masuk,
+  /// dengan pesan "token sudah kedaluwarsa" dan tombol "Coba Lagi" yang
+  /// mengulang kegagalan yang sama selamanya.
   Future<Response<dynamic>> _send(
+    Future<Response<dynamic>> Function() call,
+  ) async {
+    final res = await _once(call);
+    if (res.statusCode != 401) return res;
+
+    // 401 pada endpoint yang memakai token PERANGKAT — atau yang tidak
+    // membawa kredensial sama sekali — bukan soal access token pengguna.
+    // Menyegarkan tidak menolong, dan mengakhiri sesi pengguna hanya karena
+    // tablet kios belum dipasangkan adalah salah sasaran.
+    final path = res.requestOptions.path;
+    if (ApiRoutes.needsDeviceToken(path) || ApiRoutes.needsNoCredential(path)) {
+      return res;
+    }
+
+    if (!await _refreshSekali()) return res;
+
+    // Sekali saja. Bila percobaan kedua tetap 401, tokennya bukan masalahnya
+    // dan mengulang lagi hanya menunda pesan galat yang memang perlu dilihat.
+    return _once(call);
+  }
+
+  Future<Response<dynamic>> _once(
     Future<Response<dynamic>> Function() call,
   ) async {
     try {
@@ -180,6 +234,71 @@ class ApiClient {
     } on DioException catch (e) {
       throw ApiFailure(_describe(e), isNetwork: true);
     }
+  }
+
+  /// Satu penyegaran untuk semua pemanggil yang menunggu.
+  Future<bool> _refreshSekali() =>
+      _refreshing ??= _refresh().whenComplete(() => _refreshing = null);
+
+  Future<bool> _refresh() async {
+    final refresh = await _storage.refreshToken();
+    if (refresh == null) {
+      await _akhiriSesi();
+      return false;
+    }
+
+    Response<dynamic> res;
+    try {
+      // Lewat `_dio` langsung, BUKAN lewat `post()`: `post()` memanggil
+      // `_send()`, dan `_send()` yang menemukan 401 akan menyegarkan lagi —
+      // rekursi tanpa henti.
+      res = await _dio.post<dynamic>(
+        ApiRoutes.refresh,
+        data: {'refresh_token': refresh},
+      );
+    } on DioException {
+      // Jaringan mati, bukan sesi mati. Sesi TIDAK diakhiri: memaksa login
+      // ulang karena wifi sekolah putus sekejap sangat menjengkelkan, dan
+      // token yang tersimpan mungkin masih sah begitu jaringan kembali.
+      return false;
+    }
+
+    final status = res.statusCode ?? 0;
+    final body = res.data;
+    if (status >= 200 && status < 300 && body is Map<String, dynamic>) {
+      final data = body['data'];
+      if (data is Map<String, dynamic>) {
+        final akses = data['access_token'];
+        final segar = data['refresh_token'];
+        if (akses is String && segar is String) {
+          // Refresh token DIROTASI di server — yang lama dicabut begitu ini
+          // berhasil. Menyimpan hanya access token akan membuat penyegaran
+          // BERIKUTNYA gagal memakai token yang sudah mati, dan gejalanya
+          // muncul sejam kemudian sebagai "sesi berakhir" yang tak terduga.
+          await _storage.saveUserTokens(
+            accessToken: akses,
+            refreshToken: segar,
+          );
+          return true;
+        }
+      }
+    }
+
+    // Server menolak refresh token itu: dicabut, kedaluwarsa, atau akunnya
+    // dinonaktifkan. Tidak ada yang bisa diselamatkan dari sisi klien.
+    await _akhiriSesi();
+    return false;
+  }
+
+  /// Bersihkan sesi lokal, lalu beri tahu aplikasi.
+  ///
+  /// Kredensial perangkat kios sengaja TIDAK disentuh: perangkat dipasangkan
+  /// oleh sekolah, bukan oleh pengguna yang sedang masuk, dan absensi yang
+  /// belum terkirim harus tetap bisa dikirim setelah pengguna login ulang.
+  Future<void> _akhiriSesi() async {
+    await _storage.clearUserTokens();
+    await _storage.clearUserProfile();
+    onSessionExpired?.call();
   }
 
   Map<String, dynamic> _asObject(Response<dynamic> res) {
@@ -211,7 +330,8 @@ class ApiClient {
       return map.containsKey('data') ? map['data'] : map;
     }
 
-    final message = map?['message'] as String? ?? _statusMessage(status);
+    final message = map?['message'] as String? ??
+        _statusMessage(status, res.requestOptions.path);
     final fields = <String, String>{};
     for (final err in (map?['errors'] as List<dynamic>? ?? const [])) {
       if (err is Map && err['field'] != null && err['message'] != null) {
@@ -227,8 +347,16 @@ class ApiClient {
     );
   }
 
-  String _statusMessage(int status) => switch (status) {
-        401 => 'Sesi tidak berlaku. Perangkat perlu dipasangkan ulang.',
+  /// Pesan cadangan bila server tidak mengirimkan `message`.
+  ///
+  /// 401 butuh `path`: pada endpoint kios artinya PERANGKAT yang perlu
+  /// dipasangkan ulang, sedangkan pada endpoint biasa artinya sesi PENGGUNA
+  /// yang berakhir. Satu pesan untuk keduanya akan menyuruh guru memasangkan
+  /// ulang tablet padahal ia hanya perlu masuk kembali.
+  String _statusMessage(int status, String path) => switch (status) {
+        401 => ApiRoutes.needsDeviceToken(path)
+            ? 'Sesi perangkat tidak berlaku. Perangkat perlu dipasangkan ulang.'
+            : 'Sesi Anda sudah berakhir. Silakan masuk kembali.',
         403 => 'Akses ditolak untuk perangkat/akun ini.',
         404 => 'Data tidak ditemukan di server.',
         409 => 'Data bertentangan dengan yang sudah ada.',

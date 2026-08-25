@@ -53,17 +53,65 @@ Future<void> main() async {
   );
 }
 
-class JargonApp extends ConsumerWidget {
+/// Kunci navigator global, dipakai saat sesi berakhir.
+///
+/// MENGAPA PERLU, PADAHAL SUDAH ADA `currentUserProvider`
+///
+/// Sesi bisa berakhir di kedalaman mana pun — di dalam Absensi, Pemberkasan,
+/// atau sebuah dialog — dan klien HTTP yang mendeteksinya tidak punya
+/// BuildContext.
+///
+/// Menyetel `currentUserProvider` ke null saja TIDAK cukup: layar login
+/// memakai `pushReplacement` (login_screen.dart), sehingga rute yang memegang
+/// `home:` sudah tidak ada lagi di stack setelah login pertama. Mengubah nilai
+/// yang dibaca `home:` tidak memindahkan siapa pun — layarnya diam, hanya
+/// kartu galatnya yang tinggal. Tombol Keluar bekerja justru karena ia
+/// memanggil `pushAndRemoveUntil` sendiri; di sini hal yang sama diperlukan.
+final navigatorKey = GlobalKey<NavigatorState>();
+
+class JargonApp extends ConsumerStatefulWidget {
   const JargonApp({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<JargonApp> createState() => _JargonAppState();
+}
+
+class _JargonAppState extends ConsumerState<JargonApp> {
+  @override
+  void initState() {
+    super.initState();
+
+    // Ketika penyegaran token gagal — refresh token dicabut, kedaluwarsa,
+    // atau akunnya dinonaktifkan — klien HTTP membersihkan sesi lokal lalu
+    // memanggil ini. Profil disetel ke null DAN stack navigasi dikosongkan —
+    // keduanya perlu, alasannya ada di doc `navigatorKey` di atas.
+    //
+    // Dipasang di initState, bukan di build: build berjalan setiap kali
+    // sesuatu berubah, dan menyetel callback di sana menaruh efek samping di
+    // tempat yang seharusnya murni.
+    ref.read(apiClientProvider).onSessionExpired = () {
+      if (!mounted) return;
+      ref.read(currentUserProvider.notifier).state = null;
+
+      // Kosongkan seluruh stack, persis seperti tombol Keluar. Tanpa ini
+      // pengguna tertinggal di layar yang baru saja gagal memuat, dengan
+      // tombol "Coba Lagi" yang tidak mungkin berhasil lagi.
+      navigatorKey.currentState?.pushAndRemoveUntil(
+        MaterialPageRoute(builder: (_) => const LoginScreen()),
+        (_) => false,
+      );
+    };
+  }
+
+  @override
+  Widget build(BuildContext context) {
     // Sesi sebelumnya dipulihkan dari secure storage, sehingga pengguna tidak
     // perlu login ulang setiap membuka aplikasi.
     final user = ref.watch(currentUserProvider);
 
     return MaterialApp(
       title: 'Jargon GO',
+      navigatorKey: navigatorKey,
       debugShowCheckedModeBanner: false,
       locale: const Locale('id'),
       supportedLocales: const [Locale('id'), Locale('en')],

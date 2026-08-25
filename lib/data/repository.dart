@@ -154,6 +154,19 @@ class AbsensiRepository {
           // Jaringan masih bermasalah; hentikan batch agar tidak membanjiri.
           break;
         }
+        if (e.isCredentialProblem) {
+          // Token perangkat mati atau dicabut. Absensinya SAH — yang salah
+          // kredensialnya, dan itu bisa diperbaiki dengan memasangkan ulang.
+          // Menghapusnya di sini berarti membuang absensi sungguhan yang
+          // belum pernah sampai ke server.
+          //
+          // Tidak di-markFailed: percobaan yang gagal karena kredensial tidak
+          // boleh ikut menghabiskan kuota percobaan payload ini, kalau tidak
+          // antrean tetap terhapus lewat `isExhausted` beberapa sinkron
+          // kemudian. Batch dihentikan karena seluruh sisanya akan gagal
+          // dengan sebab yang sama.
+          break;
+        }
         // Ditolak permanen oleh aturan — tidak ada gunanya menyimpan.
         await _queue.remove(item.id);
         failed++;

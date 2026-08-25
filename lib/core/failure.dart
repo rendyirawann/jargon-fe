@@ -32,6 +32,19 @@ class ApiFailure implements Exception {
   bool get isRetryable =>
       isNetwork || statusCode == null || statusCode! >= 500 || statusCode == 429;
 
+  /// Gagal karena KREDENSIAL, bukan karena isi payload.
+  ///
+  /// Dipisahkan dari [isRetryable] karena keduanya menuntut perlakuan yang
+  /// berbeda terhadap antrean absensi: payload yang ditolak aturan memang
+  /// tidak berguna disimpan, tetapi payload yang ditolak karena token
+  /// perangkat mati **masih sah** dan akan diterima begitu perangkat
+  /// dipasangkan ulang.
+  ///
+  /// Menyamakan keduanya berarti satu token perangkat yang kedaluwarsa
+  /// menghapus seluruh absensi pagi yang belum terkirim — data milik sekolah,
+  /// hilang tanpa jejak di layar mana pun.
+  bool get isCredentialProblem => statusCode == 401 || statusCode == 403;
+
   @override
   String toString() => message;
 }

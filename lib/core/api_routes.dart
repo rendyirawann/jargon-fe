@@ -112,8 +112,15 @@ class ApiRoutes {
   ///
   /// `devices/pair` dan `auth/login` justru sedang MEMINTA kredensial, dan
   /// `/health` dipanggil layar Alamat Server sebelum ada sesi.
+  ///
+  /// `auth/refresh` masuk ke sini karena satu-satunya kredensial yang
+  /// diperiksanya ada di dalam body — dan access token yang sedang dibawa
+  /// justru yang baru saja kedaluwarsa. Mengirimkannya tidak menolong, dan
+  /// membuat log server penuh penolakan yang menyesatkan saat menelusuri
+  /// masalah sungguhan.
   static bool needsNoCredential(String path) =>
       path.startsWith(devicePair) ||
       path.startsWith(login) ||
+      path.startsWith(refresh) ||
       path.startsWith(health);
 }
