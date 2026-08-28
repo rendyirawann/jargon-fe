@@ -147,9 +147,28 @@ class _HomeShellState extends ConsumerState<HomeShell> {
       menuBackgroundColor: ClayTheme.sidebarBg,
       drawerShadowsBackgroundColor: ClayTheme.surface,
       // Gestur geser dimatikan: layar Absensi dan Lapor punya daftar yang
-      // digulir horizontal, dan gestur drawer akan merebut sentuhan itu.
-      // Tombol di bilah bawah tetap satu-satunya jalan yang pasti.
+      // digulir, dan gestur drawer akan merebut sentuhan itu.
       disableDragGesture: true,
+
+      // Ketuk di mana pun untuk menutup — di layar utama maupun di area
+      // kosong sidebar. Tanpa dua opsi ini, drawer hanya bisa ditutup dengan
+      // memilih salah satu menu, dan pengguna yang cuma ingin melihat
+      // daftarnya lalu kembali menjadi terjebak.
+      //
+      // Aman terhadap salah sentuh: `mainScreenAbsorbPointer` bawaan paket
+      // bernilai true, dan GestureDetector penutupnya dipasang DI LUAR
+      // AbsorbPointer itu — jadi ketukan menutup drawer tanpa menembus ke
+      // tombol yang ada di bawahnya.
+      //
+      // Ketukan pada baris menu dan pemilih tema tetap bekerja seperti
+      // biasa: GestureDetector di dalamnya memenangkan gesture arena lebih
+      // dulu. Pemilih tema sengaja TIDAK menutup drawer, supaya perubahan
+      // temanya langsung terlihat dan bisa dikembalikan.
+      mainScreenTapClose: true,
+      menuScreenTapClose: true,
+
+      // Tombol kembali Android menutup drawer, bukan keluar dari aplikasi.
+      androidCloseOnBackTap: true,
       menuScreen: SidebarMenu(
         nama: user?.name ?? 'Pengguna',
         // Label peran diambil dari server (`role_label`), bukan dipetakan
