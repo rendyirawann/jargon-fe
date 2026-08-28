@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_zoom_drawer/flutter_zoom_drawer.dart';
 
 import '../../core/failure.dart';
 import '../../core/theme/clay_theme.dart';
@@ -10,8 +11,8 @@ import '../absensi/absensi_screen.dart';
 import '../berkas/berkas_screen.dart';
 import '../panic/panic_feed_screen.dart';
 import 'beranda_tab.dart';
-import 'menu_panel.dart';
 import 'profile_screen.dart';
+import 'sidebar_menu.dart';
 import 'server_settings_screen.dart';
 
 /// Kerangka utama Jargon GO: beranda + tiga menu.
@@ -29,6 +30,15 @@ class HomeShell extends ConsumerStatefulWidget {
 }
 
 class _HomeShellState extends ConsumerState<HomeShell> {
+  /// Kendali drawer dipegang di sini, BUKAN diambil lewat
+  /// `ZoomDrawer.of(context)` dari dalam bilah navigasi.
+  ///
+  /// Bilah itu dibangun pada build method yang sama dengan `ZoomDrawer`,
+  /// sehingga context yang dipakainya berada DI ATAS drawer dalam pohon
+  /// widget — `ZoomDrawer.of` di sana mengembalikan null, dan tombolnya
+  /// tidak melakukan apa pun tanpa satu pun pesan galat.
+  final ZoomDrawerController _drawer = ZoomDrawerController();
+
   int _index = 0;
   HomeSummary? _summary;
   bool _loading = true;
@@ -124,7 +134,59 @@ class _HomeShellState extends ConsumerState<HomeShell> {
     // indeks lama bisa menunjuk tab yang sudah tidak ada.
     final index = _index.clamp(0, tabs.pages.length - 1);
 
-    return Scaffold(
+    return ZoomDrawer(
+      controller: _drawer,
+      // Layar utama dimiringkan dan dikecilkan; sudut kecil (-5) dipilih
+      // karena sudut besar membuat teks di tepi kanan terlihat terdistorsi
+      // pada layar ponsel kecil.
+      angle: -5,
+      mainScreenScale: 0.14,
+      slideWidth: MediaQuery.of(context).size.width * 0.74,
+      borderRadius: 30,
+      showShadow: true,
+      menuBackgroundColor: const Color(0xFF0E1424),
+      drawerShadowsBackgroundColor: const Color(0xFF1B2540),
+      // Gestur geser dimatikan: layar Absensi dan Lapor punya daftar yang
+      // digulir horizontal, dan gestur drawer akan merebut sentuhan itu.
+      // Tombol di bilah bawah tetap satu-satunya jalan yang pasti.
+      disableDragGesture: true,
+      menuScreen: SidebarMenu(
+        nama: user?.name ?? 'Pengguna',
+        // Label peran diambil dari server (`role_label`), bukan dipetakan
+        // di klien. Pemetaan di klien akan tertinggal setiap kali peran baru
+        // ditambahkan di dashboard — dan sekarang perannya jadi delapan.
+        peran: _summary?.roleLabel ?? user?.roleLabel ?? 'Jargon GO',
+        aktif: index,
+        onTutup: () => _drawer.close?.call(),
+        onPilihTab: (i) => setState(() => _index = i),
+        tab: [
+          for (final it in tabs.items)
+            SidebarItem(
+              icon: it.activeIcon,
+              label: it.label,
+              badge: it.badge,
+            ),
+        ],
+        lainnya: [
+          SidebarItem(
+            icon: Icons.person_outline_rounded,
+            label: 'Profil Saya',
+            keterangan: 'Lengkapi data diri',
+            onTap: () => Navigator.of(context).push(
+              MaterialPageRoute(builder: (_) => const ProfileScreen()),
+            ),
+          ),
+          SidebarItem(
+            icon: Icons.dns_outlined,
+            label: 'Alamat Server',
+            keterangan: 'Untuk pengujian jaringan',
+            onTap: () => Navigator.of(context).push(
+              MaterialPageRoute(builder: (_) => const ServerSettingsScreen()),
+            ),
+          ),
+        ],
+      ),
+      mainScreen: Scaffold(
       appBar: AppBar(
         titleSpacing: 20,
         title: Column(
@@ -189,49 +251,10 @@ class _HomeShellState extends ConsumerState<HomeShell> {
               items: tabs.items,
               currentIndex: index,
               onSelected: (i) => setState(() => _index = i),
-              onMenuTap: () => _bukaPanelMenu(tabs.items, index),
+              onMenuTap: () => _drawer.toggle?.call(),
             ),
+      ),
     );
-  }
-
-  /// Buka panel menu dari bawah.
-  ///
-  /// Isinya diturunkan dari `tabs.items` yang sama dengan bilah bawah, bukan
-  /// daftar terpisah. Dua daftar yang harus dijaga sinkron akan berbeda pada
-  /// perubahan berikutnya, dan panel menu yang menampilkan menu yang tidak
-  /// dimiliki akun adalah kebocoran informasi, bukan sekadar salah tampil.
-  Future<void> _bukaPanelMenu(List<ClayNavItem> items, int aktif) async {
-    final pilihan = await showMenuPanel(
-      context: context,
-      aktif: aktif,
-      menu: [
-        for (final it in items)
-          MenuPanelItem(
-            icon: it.activeIcon,
-            label: it.label,
-            badge: it.badge,
-          ),
-      ],
-      lainnya: [
-        MenuPanelItem(
-          icon: Icons.person_outline_rounded,
-          label: 'Profil Saya',
-          keterangan: 'Lengkapi data diri',
-          onTap: () => Navigator.of(context).push(
-            MaterialPageRoute(builder: (_) => const ProfileScreen()),
-          ),
-        ),
-        MenuPanelItem(
-          icon: Icons.dns_outlined,
-          label: 'Alamat Server',
-          keterangan: 'Untuk pengujian jaringan sekolah',
-          onTap: () => Navigator.of(context).push(
-            MaterialPageRoute(builder: (_) => const ServerSettingsScreen()),
-          ),
-        ),
-      ],
-    );
-
-    if (pilihan != null && mounted) setState(() => _index = pilihan);
   }
 }
+

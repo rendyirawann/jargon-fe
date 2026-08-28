@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../core/theme/clay_loading.dart';
 import '../../core/theme/clay_theme.dart';
 import '../../core/theme/clay_widgets.dart';
 import '../../data/jargon_models.dart';
@@ -21,12 +22,13 @@ class BerandaTab extends StatelessWidget {
   Widget build(BuildContext context) {
     final s = summary;
     if (s == null) {
-      return const Center(child: CircularProgressIndicator());
+      // Kerangka, bukan spinner: tata letaknya sudah benar sejak awal
+      // sehingga halaman tidak melompat begitu data tiba.
+      return const ClayBerandaSkeleton();
     }
 
-    return RefreshIndicator(
+    return ClayRefresh(
       onRefresh: onRefresh,
-      color: ClayTheme.primary,
       child: ListView(
         padding: const EdgeInsets.fromLTRB(20, 8, 20, 28),
         children: [

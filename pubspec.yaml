@@ -74,6 +74,28 @@ dependencies:
   geolocator: ^14.0.2
   geocoding: ^4.0.0
 
+  # Sidebar beranimasi (menu geser + zoom layar utama).
+  #
+  # Dipakai alih-alih Drawer bawaan Material maupun panel bawah buatan
+  # sendiri: animasi zoom-dan-miring inilah yang diminta, dan menulisnya
+  # sendiri berarti menjaga transformasi matriks, gestur geser, dan
+  # perilaku tombol kembali — pekerjaan yang sudah selesai di paket ini.
+  flutter_zoom_drawer: ^3.2.0
+
+  # Kerangka berkilau saat memuat, menggantikan spinner.
+  #
+  # Alasannya bukan estetika: spinner tidak memberi tahu APA yang sedang
+  # dimuat, sedangkan kerangka yang berbentuk seperti kartu aslinya membuat
+  # halaman tidak "melompat" begitu data tiba.
+  shimmer: ^4.0.0
+
+  # Tarik-ke-bawah dengan tampilan sendiri.
+  #
+  # RefreshIndicator bawaan menggambar lingkaran Material yang tidak bisa
+  # diubah bentuknya, dan di tengah tema claymorphism ia terlihat seperti
+  # elemen dari aplikasi lain.
+  custom_refresh_indicator: ^4.0.2
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -100,9 +122,16 @@ flutter:
   #
   # Berkas model TIDAK disertakan dalam repositori: lisensi model pra-latih
   # bervariasi dan ukurannya beberapa MB. Lihat assets/models/README.md untuk
-  # cara memperolehnya. `flutter build` akan gagal dengan pesan jelas bila
-  # berkasnya belum ada, yang lebih baik daripada APK yang lolos build tetapi
-  # tidak bisa mengenali wajah di lapangan.
+  # cara memperolehnya.
+  #
+  # KOREKSI: komentar di sini sebelumnya menyatakan `flutter build` akan
+  # gagal bila berkas modelnya belum ada. Itu TIDAK benar, dan sudah
+  # dibuktikan dengan memeriksa APK yang sudah jadi — karena yang
+  # didaftarkan adalah DIREKTORI (`assets/models/`), bukan berkas tertentu,
+  # build lolos diam-diam dan APK hanya memuat README.md.
+  #
+  # Akibatnya jalur absensi wajah di HP tidak dapat berjalan, dan
+  # kegagalannya muncul saat aplikasi dipakai, bukan saat dibangun.
   assets:
     - assets/models/
 
