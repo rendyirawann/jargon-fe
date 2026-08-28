@@ -188,7 +188,27 @@ class _HomeShellState extends ConsumerState<HomeShell> {
       ),
       mainScreen: Scaffold(
       appBar: AppBar(
-        titleSpacing: 20,
+        // Tombol sidebar di ATAS, pada posisi leading — tempat yang memang
+        // dicari orang untuk menu. Sebelumnya ditaruh di bilah bawah agar
+        // tetap terlihat saat digulir, tetapi itu menempatkannya di tempat
+        // yang tidak lazim: bilah bawah dibaca sebagai perpindahan tab,
+        // bukan sebagai pembuka menu.
+        leadingWidth: 62,
+        leading: Padding(
+          padding: const EdgeInsets.only(left: 18),
+          child: ClaySurface(
+            radius: ClayTheme.radiusPill,
+            padding: const EdgeInsets.all(10),
+            depth: 0.7,
+            onTap: () => _drawer.toggle?.call(),
+            child: const Icon(
+              Icons.menu_rounded,
+              size: ClayTheme.icon,
+              color: ClayTheme.primary,
+            ),
+          ),
+        ),
+        titleSpacing: 8,
         title: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
@@ -251,7 +271,6 @@ class _HomeShellState extends ConsumerState<HomeShell> {
               items: tabs.items,
               currentIndex: index,
               onSelected: (i) => setState(() => _index = i),
-              onMenuTap: () => _drawer.toggle?.call(),
             ),
       ),
     );

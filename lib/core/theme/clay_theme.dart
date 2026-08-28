@@ -74,6 +74,22 @@ class ClayTheme {
   static const Color textBody = Color(0xFFB4BCD4);
   static const Color textMuted = Color(0xFF7C87A6);
 
+  /// Latar kotak isian. TERANG walau temanya gelap.
+  ///
+  /// Ini pengecualian yang disengaja terhadap palet gelap. Isian yang
+  /// digambar dengan warna `surface` menyatu dengan kartu di sekelilingnya,
+  /// dan pengguna kehilangan satu-satunya petunjuk mana yang bisa diketik.
+  /// Kotak terang adalah isyarat yang sudah dikenal semua orang tanpa perlu
+  /// dipelajari.
+  ///
+  /// Konsekuensi yang WAJIB diikuti: teks dan hint di dalam isian memakai
+  /// [fieldText] dan [fieldHint], BUKAN `textStrong`/`textMuted`. Memakai
+  /// warna teks tema gelap di atas kotak terang menghasilkan teks terang di
+  /// atas latar terang — isian yang tampak kosong padahal ada isinya.
+  static const Color fieldFill = Color(0xFFF3F5FC);
+  static const Color fieldText = Color(0xFF1B2540);
+  static const Color fieldHint = Color(0xFF8A93AD);
+
   /// Bayangan gelap: arah cahaya tetap diasumsikan dari kiri-atas.
   /// Lebih pekat daripada versi terang — pada latar gelap, bayangan tipis
   /// tidak menghasilkan kedalaman apa pun.

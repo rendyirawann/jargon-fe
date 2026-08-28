@@ -63,7 +63,18 @@ class SidebarMenu extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    // MATERIAL WAJIB DI SINI, BUKAN HIASAN.
+    //
+    // `flutter_zoom_drawer` menempatkan `menuScreen` langsung di dalam Stack
+    // tanpa membungkusnya Material — sudah diperiksa di sumber paketnya
+    // (versi 3.2.0): tidak ada satu pun pemanggilan `Material(` di seluruh
+    // pustakanya.
+    //
+    // Akibatnya setiap `Text` di sini kehilangan gaya teks bawaan dan
+    // dirender dengan penanda debug Flutter: garis bawah ganda berwarna
+    // KUNING. Itu bukan salah warna tema — itu Flutter memberi tahu bahwa
+    // teksnya berada di luar Material.
+    return Material(
       color: const Color(0xFF0E1424),
       child: SafeArea(
         child: Padding(

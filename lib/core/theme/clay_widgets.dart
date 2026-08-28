@@ -416,7 +416,13 @@ class ClayField extends StatelessWidget {
           ),
         ],
         ClaySurface(
-          sunken: true,
+          // TIDAK `sunken` lagi. Permukaan tenggelam adalah cara claymorphism
+          // menandai isian, tetapi pada latar gelap efeknya hilang: kotaknya
+          // sewarna kartu di sekelilingnya. Kotak TERANG yang dipakai
+          // sebagai gantinya, karena itu isyarat "di sini bisa diketik" yang
+          // sudah dikenal semua orang tanpa perlu dipelajari.
+          color: ClayTheme.fieldFill,
+          depth: 0.5,
           radius: ClayTheme.radiusSmall,
           padding: EdgeInsets.zero,
           child: Row(
@@ -424,7 +430,7 @@ class ClayField extends StatelessWidget {
               if (icon != null)
                 Padding(
                   padding: const EdgeInsets.only(left: 16),
-                  child: Icon(icon, size: 19, color: ClayTheme.textMuted),
+                  child: Icon(icon, size: 19, color: ClayTheme.fieldHint),
                 ),
               Expanded(
                 child: TextField(
@@ -438,14 +444,27 @@ class ClayField extends StatelessWidget {
                   inputFormatters: inputFormatters,
                   onSubmitted: onSubmitted,
                   onChanged: onChanged,
+                  // `fieldText`, BUKAN `textStrong`. Kotaknya sekarang
+                  // terang, dan warna teks tema gelap di atasnya berarti
+                  // teks terang di atas latar terang — isian yang tampak
+                  // kosong padahal sudah diisi.
                   style: style ??
                       const TextStyle(
-                        color: ClayTheme.textStrong,
+                        color: ClayTheme.fieldText,
                         fontSize: 14.5,
                         fontWeight: FontWeight.w600,
                       ),
+                  cursorColor: ClayTheme.primary,
                   decoration: InputDecoration(
                     hintText: hint,
+                    // hintStyle diberikan di sini, tidak diwarisi dari tema:
+                    // tema global menyetel hint untuk latar GELAP, dan nilai
+                    // itu tenggelam di atas kotak terang.
+                    hintStyle: const TextStyle(
+                      color: ClayTheme.fieldHint,
+                      fontSize: 14,
+                      fontWeight: FontWeight.w500,
+                    ),
                     counterText: '',
                     isDense: true,
                     contentPadding: EdgeInsets.symmetric(
@@ -533,20 +552,11 @@ class ClayNavBar extends StatelessWidget {
     required this.items,
     required this.currentIndex,
     required this.onSelected,
-    this.onMenuTap,
   });
 
   final List<ClayNavItem> items;
   final int currentIndex;
   final ValueChanged<int> onSelected;
-
-  /// Tombol menu di ujung kiri bilah.
-  ///
-  /// Ditaruh DI DALAM bilah yang mengapung, bukan di AppBar, supaya tetap
-  /// terjangkau saat halaman digulir jauh ke bawah — AppBar ikut hilang,
-  /// bilah ini tidak. Bila null, tombolnya tidak digambar sama sekali dan
-  /// bilahnya kembali seperti semula.
-  final VoidCallback? onMenuTap;
 
   @override
   Widget build(BuildContext context) {
@@ -558,9 +568,7 @@ class ClayNavBar extends StatelessWidget {
           radius: ClayTheme.radiusPill,
           padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
           child: Row(
-            children: [
-              if (onMenuTap != null) _MenuToggle(onTap: onMenuTap!),
-              ...List.generate(items.length, (i) {
+            children: List.generate(items.length, (i) {
               final selected = i == currentIndex;
               final item = items[i];
 
@@ -633,46 +641,8 @@ class ClayNavBar extends StatelessWidget {
                   ),
                 ),
               );
-              }),
-            ],
+            }),
           ),
-        ),
-      ),
-    );
-  }
-}
-
-/// Tombol menu di dalam bilah mengapung.
-///
-/// Sengaja BUKAN ikon hamburger tiga garis: yang dibuka bukan sidebar yang
-/// menggeser layar, melainkan panel yang muncul dari bawah. Ikon petak
-/// memberi harapan yang benar tentang apa yang akan terjadi.
-class _MenuToggle extends StatelessWidget {
-  const _MenuToggle({required this.onTap});
-
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      behavior: HitTestBehavior.opaque,
-      onTap: onTap,
-      child: Container(
-        // Lebar tetap, tidak Expanded: tombol ini tidak boleh menyusut
-        // ketika jumlah tab bertambah, karena ia satu-satunya jalan ke
-        // menu lain.
-        width: 46,
-        height: 46,
-        margin: const EdgeInsets.only(right: 2),
-        alignment: Alignment.center,
-        decoration: BoxDecoration(
-          color: ClayTheme.primarySoft,
-          borderRadius: BorderRadius.circular(ClayTheme.radiusPill),
-        ),
-        child: const Icon(
-          Icons.grid_view_rounded,
-          size: ClayTheme.icon,
-          color: ClayTheme.primary,
         ),
       ),
     );
