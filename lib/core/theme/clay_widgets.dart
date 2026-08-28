@@ -161,7 +161,7 @@ class ClayCard extends StatelessWidget {
                 Expanded(
                   child: Text(
                     title!,
-                    style: const TextStyle(
+                    style: TextStyle(
                       color: ClayTheme.textStrong,
                       fontSize: 15,
                       fontWeight: FontWeight.w800,
@@ -407,7 +407,7 @@ class ClayField extends StatelessWidget {
             padding: const EdgeInsets.only(left: 6, bottom: 8),
             child: Text(
               label!,
-              style: const TextStyle(
+              style: TextStyle(
                 color: ClayTheme.textBody,
                 fontSize: 13,
                 fontWeight: FontWeight.w700,
@@ -519,7 +519,7 @@ class ClayEmpty extends StatelessWidget {
             Text(
               title,
               textAlign: TextAlign.center,
-              style: const TextStyle(
+              style: TextStyle(
                 color: ClayTheme.textStrong,
                 fontSize: 16,
                 fontWeight: FontWeight.w800,
@@ -530,7 +530,7 @@ class ClayEmpty extends StatelessWidget {
               Text(
                 message!,
                 textAlign: TextAlign.center,
-                style: const TextStyle(
+                style: TextStyle(
                   color: ClayTheme.textMuted,
                   fontSize: 13,
                   height: 1.5,
@@ -674,9 +674,7 @@ void showClaySnack(BuildContext context, String message, {bool error = false}) {
         // Pada palet gelap warna itu hampir putih, sehingga teksnya menjadi
         // putih di atas putih — pesan galat yang tidak terbaca adalah
         // kegagalan yang lebih buruk daripada tidak ada pesan sama sekali.
-        backgroundColor: error
-            ? ClayTheme.danger
-            : Theme.of(context).snackBarTheme.backgroundColor,
+        backgroundColor: error ? ClayTheme.danger : ClayTheme.snackBg,
         duration: Duration(seconds: error ? 5 : 3),
       ),
     );

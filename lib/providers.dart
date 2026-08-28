@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'core/api_client.dart';
 import 'core/api_config.dart';
+import 'core/theme/clay_theme.dart';
 import 'core/storage.dart';
 import 'data/models.dart';
 import 'data/offline_queue.dart';
@@ -46,6 +47,21 @@ final deviceProfileProvider = StateProvider<Map<String, dynamic>?>((ref) {
 /// Profil pengguna yang sedang masuk (guru / kepala sekolah).
 final currentUserProvider = StateProvider<UserProfile?>((ref) {
   return ref.watch(repositoryProvider).cachedUser();
+});
+
+/// Tema gelap aktif atau tidak.
+///
+/// Nilai awalnya dibaca dari penyimpanan, dan bawaannya GELAP — itu tema yang
+/// dirancang lebih dulu, dan membuka aplikasi dengan tema yang belum dipoles
+/// memberi kesan pertama yang salah.
+///
+/// `ClayTheme.pakai` dipanggil di sini juga, bukan hanya di UI: warna dibaca
+/// lewat getter statis, jadi nilai statis itu harus sudah benar sebelum widget
+/// mana pun dibangun.
+final temaGelapProvider = StateProvider<bool>((ref) {
+  final tersimpan = ref.watch(storageProvider).temaGelap() ?? true;
+  ClayTheme.pakai(gelap: tersimpan);
+  return tersimpan;
 });
 
 /// Jumlah absensi yang masih menunggu terkirim.

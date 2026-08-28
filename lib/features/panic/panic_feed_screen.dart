@@ -121,10 +121,10 @@ class _PanicFeedScreenState extends ConsumerState<PanicFeedScreen> {
               padding: const EdgeInsets.all(14),
               child: Row(
                 children: [
-                  const Icon(Icons.shield_rounded,
+                  Icon(Icons.shield_rounded,
                       size: 19, color: ClayTheme.primary),
                   const SizedBox(width: 11),
-                  const Expanded(
+                  Expanded(
                     child: Text(
                       'Laporan Anda tampil anonim. Identitas pelapor tidak '
                       'pernah ditampilkan kepada pihak sekolah.',
@@ -303,7 +303,7 @@ class PanicReportCard extends StatelessWidget {
                       children: [
                         Text(
                           report.anonymousHandle,
-                          style: const TextStyle(
+                          style: TextStyle(
                             color: ClayTheme.textStrong,
                             fontSize: 13.5,
                             fontWeight: FontWeight.w800,
@@ -311,7 +311,7 @@ class PanicReportCard extends StatelessWidget {
                         ),
                         if (report.isMine) ...[
                           const SizedBox(width: 7),
-                          const ClayBadge(
+                          ClayBadge(
                             label: 'Anda',
                             color: ClayTheme.primary,
                           ),
@@ -321,7 +321,7 @@ class PanicReportCard extends StatelessWidget {
                     const SizedBox(height: 2),
                     Text(
                       '${report.schoolLabel} · ${_relativeTime(report.createdAt)}',
-                      style: const TextStyle(
+                      style: TextStyle(
                         color: ClayTheme.textMuted,
                         fontSize: 11,
                       ),
@@ -341,7 +341,7 @@ class PanicReportCard extends StatelessWidget {
 
           Text(
             report.title,
-            style: const TextStyle(
+            style: TextStyle(
               color: ClayTheme.textStrong,
               fontSize: 15,
               fontWeight: FontWeight.w800,
@@ -353,7 +353,7 @@ class PanicReportCard extends StatelessWidget {
             report.body,
             maxLines: 3,
             overflow: TextOverflow.ellipsis,
-            style: const TextStyle(
+            style: TextStyle(
               color: ClayTheme.textBody,
               fontSize: 13,
               height: 1.5,

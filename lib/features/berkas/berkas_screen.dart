@@ -205,7 +205,7 @@ class _SubmissionCard extends StatelessWidget {
                       item.title,
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(
+                      style: TextStyle(
                         color: ClayTheme.textStrong,
                         fontSize: 14.5,
                         fontWeight: FontWeight.w800,
@@ -218,7 +218,7 @@ class _SubmissionCard extends StatelessWidget {
                         Submission.purposeLabel(item.purpose),
                         if (item.period != null) item.period!,
                       ].join(' · '),
-                      style: const TextStyle(
+                      style: TextStyle(
                         color: ClayTheme.textMuted,
                         fontSize: 11.5,
                       ),
@@ -239,7 +239,7 @@ class _SubmissionCard extends StatelessWidget {
               const Spacer(),
               Text(
                 '${item.fileCount} berkas',
-                style: const TextStyle(
+                style: TextStyle(
                   color: ClayTheme.textMuted,
                   fontSize: 11.5,
                   fontWeight: FontWeight.w600,
@@ -293,7 +293,7 @@ class _NewSubmissionSheetState extends State<_NewSubmissionSheet> {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          const Text(
+          Text(
             'Pengajuan Baru',
             style: TextStyle(
               color: ClayTheme.textStrong,
@@ -302,7 +302,7 @@ class _NewSubmissionSheetState extends State<_NewSubmissionSheet> {
             ),
           ),
           const SizedBox(height: 20),
-          const Padding(
+          Padding(
             padding: EdgeInsets.only(left: 6, bottom: 11),
             child: Text(
               'Keperluan',

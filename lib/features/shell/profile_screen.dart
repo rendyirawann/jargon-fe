@@ -37,14 +37,14 @@ class ProfileScreen extends ConsumerWidget {
                   color: ClayTheme.primarySoft,
                   padding: const EdgeInsets.all(22),
                   depth: 0.8,
-                  child: const Icon(Icons.person_rounded,
+                  child: Icon(Icons.person_rounded,
                       size: 38, color: ClayTheme.primary),
                 ),
                 const SizedBox(height: 16),
                 Text(
                   user?.name ?? '-',
                   textAlign: TextAlign.center,
-                  style: const TextStyle(
+                  style: TextStyle(
                     color: ClayTheme.textStrong,
                     fontSize: 18,
                     fontWeight: FontWeight.w900,
@@ -60,7 +60,7 @@ class ProfileScreen extends ConsumerWidget {
                   Text(
                     user!.schoolName!,
                     textAlign: TextAlign.center,
-                    style: const TextStyle(
+                    style: TextStyle(
                       color: ClayTheme.textMuted,
                       fontSize: 12.5,
                     ),
@@ -108,7 +108,7 @@ class ProfileScreen extends ConsumerWidget {
                                   children: [
                                     Text(
                                       s.fullName,
-                                      style: const TextStyle(
+                                      style: TextStyle(
                                         color: ClayTheme.textStrong,
                                         fontSize: 13.5,
                                         fontWeight: FontWeight.w700,
@@ -121,7 +121,7 @@ class ProfileScreen extends ConsumerWidget {
                                         s.schoolName,
                                         if (s.nisn != null) 'NISN ${s.nisn}',
                                       ].join(' · '),
-                                      style: const TextStyle(
+                                      style: TextStyle(
                                         color: ClayTheme.textMuted,
                                         fontSize: 11,
                                       ),
@@ -156,7 +156,7 @@ class ProfileScreen extends ConsumerWidget {
                           'terpasang di sekolah.'
                       : 'Terpasang di ${deviceProfile['school_name']} '
                           '(${deviceProfile['device_code']}).',
-                  style: const TextStyle(
+                  style: TextStyle(
                     color: ClayTheme.textMuted,
                     fontSize: 12,
                     height: 1.5,
@@ -262,7 +262,7 @@ class _Row extends StatelessWidget {
               width: 118,
               child: Text(
                 label,
-                style: const TextStyle(
+                style: TextStyle(
                   color: ClayTheme.textMuted,
                   fontSize: 12.5,
                 ),
@@ -271,7 +271,7 @@ class _Row extends StatelessWidget {
             Expanded(
               child: Text(
                 value,
-                style: const TextStyle(
+                style: TextStyle(
                   color: ClayTheme.textStrong,
                   fontSize: 12.5,
                   fontWeight: FontWeight.w700,

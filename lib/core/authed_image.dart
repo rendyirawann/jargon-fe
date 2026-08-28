@@ -45,7 +45,7 @@ class AuthedImage extends ConsumerWidget {
 
         final token = snapshot.data;
         if (token == null || token.isEmpty) {
-          return _placeholder(const Icon(Icons.lock_outline,
+          return _placeholder(Icon(Icons.lock_outline,
               color: ClayTheme.textMuted));
         }
 
@@ -55,7 +55,7 @@ class AuthedImage extends ConsumerWidget {
           height: height,
           fit: fit,
           headers: {'Authorization': 'Bearer $token'},
-          errorBuilder: (_, _, _) => _placeholder(const Icon(
+          errorBuilder: (_, _, _) => _placeholder(Icon(
             Icons.broken_image_outlined,
             color: ClayTheme.textMuted,
           )),

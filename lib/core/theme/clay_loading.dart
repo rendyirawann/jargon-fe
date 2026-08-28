@@ -54,7 +54,7 @@ class ClayShimmer extends StatelessWidget {
   Widget build(BuildContext context) {
     return Shimmer.fromColors(
       baseColor: ClayTheme.surface,
-      highlightColor: const Color(0xFF2A3A63),
+      highlightColor: ClayTheme.shimmerHighlight,
       period: const Duration(milliseconds: 1400),
       child: child,
     );

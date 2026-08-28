@@ -167,7 +167,7 @@ class _ServerSettingsScreenState extends ConsumerState<ServerSettingsScreen> {
                 Text(
                   'Isi alamat server saja, tanpa /v1. Skema http:// boleh '
                   'dikosongkan.',
-                  style: const TextStyle(
+                  style: TextStyle(
                     color: ClayTheme.textMuted,
                     fontSize: 11.5,
                     height: 1.5,
@@ -339,7 +339,7 @@ class _Hint extends StatelessWidget {
           children: [
             Text(
               where,
-              style: const TextStyle(
+              style: TextStyle(
                 color: ClayTheme.textStrong,
                 fontSize: 12.5,
                 fontWeight: FontWeight.w800,
@@ -348,7 +348,7 @@ class _Hint extends StatelessWidget {
             const SizedBox(height: 3),
             SelectableText(
               value,
-              style: const TextStyle(
+              style: TextStyle(
                 color: ClayTheme.primary,
                 fontSize: 12,
                 fontWeight: FontWeight.w700,
@@ -357,7 +357,7 @@ class _Hint extends StatelessWidget {
             const SizedBox(height: 3),
             Text(
               note,
-              style: const TextStyle(
+              style: TextStyle(
                 color: ClayTheme.textMuted,
                 fontSize: 11,
                 height: 1.45,

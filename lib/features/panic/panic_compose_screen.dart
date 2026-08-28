@@ -157,10 +157,10 @@ class _PanicComposeScreenState extends ConsumerState<PanicComposeScreen> {
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Icon(Icons.verified_user_rounded,
+                      Icon(Icons.verified_user_rounded,
                           color: ClayTheme.primary, size: 22),
                       const SizedBox(width: 13),
-                      const Expanded(
+                      Expanded(
                         child: Text(
                           'Nama Anda tidak ditampilkan. Laporan muncul dengan '
                           'nama samaran acak, dan pihak sekolah tidak dapat '
@@ -210,7 +210,7 @@ class _PanicComposeScreenState extends ConsumerState<PanicComposeScreen> {
                     padding: const EdgeInsets.only(left: 6),
                     child: Text(
                       _selected!.description!,
-                      style: const TextStyle(
+                      style: TextStyle(
                         color: ClayTheme.textMuted,
                         fontSize: 11.5,
                         height: 1.45,
@@ -263,7 +263,7 @@ class _PanicComposeScreenState extends ConsumerState<PanicComposeScreen> {
                                     width: 74,
                                     height: 74,
                                     color: ClayTheme.primarySoft,
-                                    child: const Icon(Icons.image_rounded,
+                                    child: Icon(Icons.image_rounded,
                                         color: ClayTheme.primary),
                                   ),
                                 ),
@@ -276,7 +276,7 @@ class _PanicComposeScreenState extends ConsumerState<PanicComposeScreen> {
                                       setState(() => _photos.removeAt(e.key)),
                                   child: Container(
                                     padding: const EdgeInsets.all(3),
-                                    decoration: const BoxDecoration(
+                                    decoration: BoxDecoration(
                                       color: ClayTheme.danger,
                                       shape: BoxShape.circle,
                                     ),
@@ -294,13 +294,13 @@ class _PanicComposeScreenState extends ConsumerState<PanicComposeScreen> {
                         padding: const EdgeInsets.all(24),
                         depth: 0.6,
                         onTap: _busy ? null : _addPhoto,
-                        child: const Icon(Icons.add_a_photo_outlined,
+                        child: Icon(Icons.add_a_photo_outlined,
                             size: 24, color: ClayTheme.textMuted),
                       ),
                   ],
                 ),
                 const SizedBox(height: 9),
-                const Padding(
+                Padding(
                   padding: EdgeInsets.only(left: 6),
                   child: Text(
                     'Data lokasi pada foto dihapus otomatis sebelum disimpan.',
@@ -345,7 +345,7 @@ class _PanicComposeScreenState extends ConsumerState<PanicComposeScreen> {
                     padding: const EdgeInsets.all(14),
                     child: Text(
                       _error!,
-                      style: const TextStyle(
+                      style: TextStyle(
                         color: ClayTheme.danger,
                         fontSize: 12.5,
                         fontWeight: FontWeight.w600,
@@ -364,7 +364,7 @@ class _PanicComposeScreenState extends ConsumerState<PanicComposeScreen> {
                   onPressed: _busy ? null : _submit,
                 ),
                 const SizedBox(height: 14),
-                const Text(
+                Text(
                   'Laporan palsu dapat dikenai sanksi. Sampaikan hal yang '
                   'benar-benar Anda alami atau saksikan.',
                   textAlign: TextAlign.center,
@@ -390,7 +390,7 @@ class _Label extends StatelessWidget {
         padding: const EdgeInsets.only(left: 6, bottom: 11),
         child: Text(
           text,
-          style: const TextStyle(
+          style: TextStyle(
             color: ClayTheme.textBody,
             fontSize: 13,
             fontWeight: FontWeight.w700,
@@ -449,7 +449,7 @@ class _VisibilityOption extends StatelessWidget {
                 const SizedBox(height: 3),
                 Text(
                   subtitle,
-                  style: const TextStyle(
+                  style: TextStyle(
                     color: ClayTheme.textMuted,
                     fontSize: 11.5,
                     height: 1.45,
@@ -492,11 +492,11 @@ class _SentDialog extends StatelessWidget {
               color: ClayTheme.successSoft,
               padding: const EdgeInsets.all(20),
               depth: 0.7,
-              child: const Icon(Icons.check_rounded,
+              child: Icon(Icons.check_rounded,
                   size: 34, color: ClayTheme.success),
             ),
             const SizedBox(height: 20),
-            const Text(
+            Text(
               'Laporan Terkirim',
               style: TextStyle(
                 color: ClayTheme.textStrong,
@@ -508,7 +508,7 @@ class _SentDialog extends StatelessWidget {
             Text(
               message,
               textAlign: TextAlign.center,
-              style: const TextStyle(
+              style: TextStyle(
                 color: ClayTheme.textBody,
                 fontSize: 12.5,
                 height: 1.55,
@@ -524,7 +524,7 @@ class _SentDialog extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 13),
               child: Column(
                 children: [
-                  const Text(
+                  Text(
                     'Nama samaran Anda pada laporan ini',
                     style: TextStyle(
                       color: ClayTheme.textMuted,
@@ -534,7 +534,7 @@ class _SentDialog extends StatelessWidget {
                   const SizedBox(height: 5),
                   Text(
                     handle,
-                    style: const TextStyle(
+                    style: TextStyle(
                       color: ClayTheme.primary,
                       fontSize: 19,
                       fontWeight: FontWeight.w900,

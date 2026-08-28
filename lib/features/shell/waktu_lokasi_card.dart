@@ -189,7 +189,7 @@ class _WaktuLokasiCardState extends State<WaktuLokasiCard> {
               // inilah yang dicari mata lebih dulu.
               Text(
                 _waktu,
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: 34,
                   height: 1,
                   fontWeight: FontWeight.w800,
@@ -212,7 +212,7 @@ class _WaktuLokasiCardState extends State<WaktuLokasiCard> {
           const SizedBox(height: 6),
           Text(
             _tanggal,
-            style: const TextStyle(
+            style: TextStyle(
               fontSize: 13,
               fontWeight: FontWeight.w600,
               color: ClayTheme.textBody,
@@ -328,7 +328,7 @@ class _AksiKecil extends StatelessWidget {
         ),
         child: Text(
           label,
-          style: const TextStyle(
+          style: TextStyle(
             fontSize: 11,
             fontWeight: FontWeight.w700,
             color: ClayTheme.primary,

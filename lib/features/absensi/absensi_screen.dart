@@ -183,7 +183,7 @@ class _AbsensiScreenState extends ConsumerState<AbsensiScreen> {
           if (_recap != null) _RecapCard(recap: _recap!),
 
           const SizedBox(height: 18),
-          const Padding(
+          Padding(
             padding: EdgeInsets.only(left: 6, bottom: 12),
             child: Text(
               'RIWAYAT',
@@ -243,7 +243,7 @@ class _RecapCard extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
+                    Text(
                       'Persentase Kehadiran',
                       style: TextStyle(
                         color: ClayTheme.textBody,
@@ -254,7 +254,7 @@ class _RecapCard extends StatelessWidget {
                     const SizedBox(height: 3),
                     Text(
                       'dari ${v('hari_tercatat')} hari tercatat',
-                      style: const TextStyle(
+                      style: TextStyle(
                         color: ClayTheme.textMuted,
                         fontSize: 11.5,
                       ),
@@ -290,7 +290,7 @@ class _RecapCard extends StatelessWidget {
             Text(
               'Total keterlambatan ${v('total_menit_terlambat')} menit '
               'pada periode ini.',
-              style: const TextStyle(
+              style: TextStyle(
                 color: ClayTheme.textMuted,
                 fontSize: 11.5,
                 height: 1.4,
@@ -372,7 +372,7 @@ class _AttendanceRowCard extends StatelessWidget {
               children: [
                 Text(
                   showName ? row.studentName : row.statusLabel,
-                  style: const TextStyle(
+                  style: TextStyle(
                     color: ClayTheme.textStrong,
                     fontSize: 13.5,
                     fontWeight: FontWeight.w700,
@@ -387,7 +387,7 @@ class _AttendanceRowCard extends StatelessWidget {
                     if (row.checkIn == null && row.checkOut == null)
                       'tidak ada pemindaian',
                   ].join(' · '),
-                  style: const TextStyle(
+                  style: TextStyle(
                     color: ClayTheme.textMuted,
                     fontSize: 11.5,
                   ),

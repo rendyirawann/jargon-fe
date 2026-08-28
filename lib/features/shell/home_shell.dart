@@ -144,8 +144,8 @@ class _HomeShellState extends ConsumerState<HomeShell> {
       slideWidth: MediaQuery.of(context).size.width * 0.74,
       borderRadius: 30,
       showShadow: true,
-      menuBackgroundColor: const Color(0xFF0E1424),
-      drawerShadowsBackgroundColor: const Color(0xFF1B2540),
+      menuBackgroundColor: ClayTheme.sidebarBg,
+      drawerShadowsBackgroundColor: ClayTheme.surface,
       // Gestur geser dimatikan: layar Absensi dan Lapor punya daftar yang
       // digulir horizontal, dan gestur drawer akan merebut sentuhan itu.
       // Tombol di bilah bawah tetap satu-satunya jalan yang pasti.
@@ -158,6 +158,14 @@ class _HomeShellState extends ConsumerState<HomeShell> {
         peran: _summary?.roleLabel ?? user?.roleLabel ?? 'Jargon GO',
         aktif: index,
         onTutup: () => _drawer.close?.call(),
+        gelap: ref.watch(temaGelapProvider),
+        onGantiTema: (gelap) {
+          // Disimpan DAN dipasang ke state provider. Menyimpan saja tidak
+          // mengubah tampilan sampai aplikasi dibuka lagi; menyetel provider
+          // saja membuat pilihannya hilang setelah aplikasi ditutup.
+          ref.read(storageProvider).simpanTemaGelap(gelap);
+          ref.read(temaGelapProvider.notifier).state = gelap;
+        },
         onPilihTab: (i) => setState(() => _index = i),
         tab: [
           for (final it in tabs.items)
@@ -201,7 +209,7 @@ class _HomeShellState extends ConsumerState<HomeShell> {
             padding: const EdgeInsets.all(10),
             depth: 0.7,
             onTap: () => _drawer.toggle?.call(),
-            child: const Icon(
+            child: Icon(
               Icons.menu_rounded,
               size: ClayTheme.icon,
               color: ClayTheme.primary,
@@ -215,7 +223,7 @@ class _HomeShellState extends ConsumerState<HomeShell> {
           children: [
             Text(
               _summary?.greeting ?? 'Jargon GO',
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 17,
                 fontWeight: FontWeight.w800,
                 color: ClayTheme.textStrong,
@@ -223,7 +231,7 @@ class _HomeShellState extends ConsumerState<HomeShell> {
             ),
             Text(
               _summary?.roleLabel ?? user?.roleLabel ?? '',
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 11.5,
                 fontWeight: FontWeight.w600,
                 color: ClayTheme.textMuted,
@@ -241,7 +249,7 @@ class _HomeShellState extends ConsumerState<HomeShell> {
               onTap: () => Navigator.of(context).push(
                 MaterialPageRoute(builder: (_) => const ProfileScreen()),
               ),
-              child: const Icon(
+              child: Icon(
                 Icons.person_outline_rounded,
                 size: 20,
                 color: ClayTheme.primary,

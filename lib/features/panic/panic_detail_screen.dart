@@ -132,7 +132,7 @@ class _PanicDetailScreenState extends ConsumerState<PanicDetailScreen> {
                             'Komentar (${detail.comments.length})',
                           ),
                           if (detail.comments.isEmpty)
-                            const Padding(
+                            Padding(
                               padding: EdgeInsets.symmetric(vertical: 20),
                               child: Text(
                                 'Belum ada komentar.',
@@ -223,7 +223,7 @@ class _ReportBody extends StatelessWidget {
           const SizedBox(height: 14),
           Text(
             report.title,
-            style: const TextStyle(
+            style: TextStyle(
               color: ClayTheme.textStrong,
               fontSize: 18,
               fontWeight: FontWeight.w900,
@@ -233,12 +233,12 @@ class _ReportBody extends StatelessWidget {
           const SizedBox(height: 8),
           Text(
             '${report.anonymousHandle} · ${report.schoolLabel}',
-            style: const TextStyle(color: ClayTheme.textMuted, fontSize: 11.5),
+            style: TextStyle(color: ClayTheme.textMuted, fontSize: 11.5),
           ),
           const SizedBox(height: 16),
           Text(
             report.body,
-            style: const TextStyle(
+            style: TextStyle(
               color: ClayTheme.textBody,
               fontSize: 14,
               height: 1.6,
@@ -257,12 +257,12 @@ class _ReportBody extends StatelessWidget {
           const SizedBox(height: 16),
           Row(
             children: [
-              const Icon(Icons.front_hand_rounded,
+              Icon(Icons.front_hand_rounded,
                   size: 16, color: ClayTheme.primary),
               const SizedBox(width: 7),
               Text(
                 '${report.supportCount} orang menyatakan mengalami hal serupa',
-                style: const TextStyle(
+                style: TextStyle(
                   color: ClayTheme.textMuted,
                   fontSize: 11.5,
                 ),
@@ -283,7 +283,7 @@ class _Timeline extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (entries.isEmpty) {
-      return const Padding(
+      return Padding(
         padding: EdgeInsets.symmetric(vertical: 16),
         child: Text(
           'Belum ada tindak lanjut yang dicatat.',
@@ -331,7 +331,7 @@ class _Timeline extends StatelessWidget {
                       children: [
                         Text(
                           _statusLabel(e.status),
-                          style: const TextStyle(
+                          style: TextStyle(
                             color: ClayTheme.textStrong,
                             fontSize: 13,
                             fontWeight: FontWeight.w800,
@@ -341,7 +341,7 @@ class _Timeline extends StatelessWidget {
                           const SizedBox(height: 4),
                           Text(
                             e.note!,
-                            style: const TextStyle(
+                            style: TextStyle(
                               color: ClayTheme.textBody,
                               fontSize: 12.5,
                               height: 1.45,
@@ -354,7 +354,7 @@ class _Timeline extends StatelessWidget {
                             if (e.actorLabel != null) e.actorLabel!,
                             '${e.createdAt.day}/${e.createdAt.month}/${e.createdAt.year}',
                           ].join(' · '),
-                          style: const TextStyle(
+                          style: TextStyle(
                             color: ClayTheme.textMuted,
                             fontSize: 10.5,
                           ),
@@ -422,7 +422,7 @@ class _CommentCard extends StatelessWidget {
                 const SizedBox(width: 6),
                 Text(
                   '· ${comment.officialTitle}',
-                  style: const TextStyle(
+                  style: TextStyle(
                     color: ClayTheme.textMuted,
                     fontSize: 11,
                   ),
@@ -430,14 +430,14 @@ class _CommentCard extends StatelessWidget {
               ],
               if (comment.isMine) ...[
                 const SizedBox(width: 7),
-                const ClayBadge(label: 'Anda', color: ClayTheme.primary),
+                ClayBadge(label: 'Anda', color: ClayTheme.primary),
               ],
             ],
           ),
           const SizedBox(height: 8),
           Text(
             comment.body,
-            style: const TextStyle(
+            style: TextStyle(
               color: ClayTheme.textBody,
               fontSize: 13,
               height: 1.5,
@@ -459,7 +459,7 @@ class _SectionTitle extends StatelessWidget {
         padding: const EdgeInsets.only(left: 6, bottom: 12),
         child: Text(
           text.toUpperCase(),
-          style: const TextStyle(
+          style: TextStyle(
             color: ClayTheme.textMuted,
             fontSize: 11,
             fontWeight: FontWeight.w800,

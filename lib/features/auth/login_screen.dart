@@ -110,7 +110,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       radius: 34,
                       padding: const EdgeInsets.all(24),
                       depth: 1.25,
-                      child: const Icon(
+                      child: Icon(
                         Icons.school_rounded,
                         size: 48,
                         color: ClayTheme.primary,
@@ -118,7 +118,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     ),
                   ),
                   const SizedBox(height: 24),
-                  const Text(
+                  Text(
                     'Jargon GO',
                     textAlign: TextAlign.center,
                     style: TextStyle(
@@ -129,7 +129,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     ),
                   ),
                   const SizedBox(height: 6),
-                  const Text(
+                  Text(
                     'Super Apps Dinas Pendidikan\nProvinsi Sumatera Utara',
                     textAlign: TextAlign.center,
                     style: TextStyle(
@@ -151,7 +151,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     enabled: !_busy,
                     inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                     onChanged: (_) => setState(() {}),
-                    style: const TextStyle(
+                    style: TextStyle(
                       color: ClayTheme.textStrong,
                       fontSize: 17,
                       fontWeight: FontWeight.w700,
@@ -204,13 +204,13 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Icon(Icons.error_outline_rounded,
+                          Icon(Icons.error_outline_rounded,
                               color: ClayTheme.danger, size: 19),
                           const SizedBox(width: 11),
                           Expanded(
                             child: Text(
                               _error!,
-                              style: const TextStyle(
+                              style: TextStyle(
                                 color: ClayTheme.danger,
                                 fontSize: 12.5,
                                 height: 1.45,
@@ -241,10 +241,10 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Icon(Icons.info_outline_rounded,
+                        Icon(Icons.info_outline_rounded,
                             size: 18, color: ClayTheme.textMuted),
                         const SizedBox(width: 11),
-                        const Expanded(
+                        Expanded(
                           child: Text(
                             'Akun didaftarkan oleh operator sekolah, bukan mandiri. '
                             'Bila belum memiliki akun atau lupa kata sandi, hubungi '

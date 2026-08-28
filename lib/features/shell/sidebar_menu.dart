@@ -42,6 +42,8 @@ class SidebarMenu extends StatelessWidget {
     required this.onPilihTab,
     required this.onTutup,
     this.lainnya = const [],
+    this.gelap = true,
+    this.onGantiTema,
   });
 
   final String nama;
@@ -61,6 +63,12 @@ class SidebarMenu extends StatelessWidget {
 
   final List<SidebarItem> lainnya;
 
+  /// Tema yang sedang aktif, untuk menandai pilihan mana yang terpilih.
+  final bool gelap;
+
+  /// Bila null, pemilih tema tidak digambar sama sekali.
+  final ValueChanged<bool>? onGantiTema;
+
   @override
   Widget build(BuildContext context) {
     // MATERIAL WAJIB DI SINI, BUKAN HIASAN.
@@ -75,7 +83,7 @@ class SidebarMenu extends StatelessWidget {
     // KUNING. Itu bukan salah warna tema — itu Flutter memberi tahu bahwa
     // teksnya berada di luar Material.
     return Material(
-      color: const Color(0xFF0E1424),
+      color: ClayTheme.sidebarBg,
       child: SafeArea(
         child: Padding(
           // Padding kanan lebih besar: sisi itu tertutup layar utama yang
@@ -120,6 +128,9 @@ class SidebarMenu extends StatelessWidget {
                   ],
                 ),
               ),
+              if (onGantiTema != null)
+                _PilihTema(gelap: gelap, onGanti: onGantiTema!),
+              const SizedBox(height: 12),
               Text(
                 'Jargon GO',
                 style: TextStyle(
@@ -185,7 +196,7 @@ class _Identitas extends StatelessWidget {
                 nama,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: 14,
                   fontWeight: FontWeight.w800,
                   color: ClayTheme.textStrong,
@@ -196,7 +207,7 @@ class _Identitas extends StatelessWidget {
                 peran,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: 11.5,
                   color: ClayTheme.textMuted,
                 ),
@@ -219,7 +230,7 @@ class _Label extends StatelessWidget {
         padding: const EdgeInsets.only(left: 4, bottom: 10),
         child: Text(
           teks,
-          style: const TextStyle(
+          style: TextStyle(
             fontSize: 10.5,
             fontWeight: FontWeight.w800,
             letterSpacing: 1,
@@ -251,7 +262,7 @@ class _Baris extends StatelessWidget {
         sunken: terpilih,
         depth: terpilih ? 0.7 : 0.5,
         radius: ClayTheme.radiusSmall,
-        color: terpilih ? ClayTheme.surface : const Color(0xFF16203A),
+        color: terpilih ? ClayTheme.surface : ClayTheme.sidebarRow,
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 11),
         onTap: onTap,
         child: Row(
@@ -285,7 +296,7 @@ class _Baris extends StatelessWidget {
                       item.keterangan!,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 11,
                         color: ClayTheme.textMuted,
                       ),
@@ -312,6 +323,89 @@ class _Baris extends StatelessWidget {
               ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+
+/// Pemilih tema: dua tombol, bukan satu switch.
+///
+/// Switch hanya menyatakan "menyala / mati" — dan pengguna harus menebak mana
+/// yang menyala. Dua tombol berlabel menampilkan KEDUA pilihan sekaligus,
+/// dengan yang aktif digambar tenggelam.
+class _PilihTema extends StatelessWidget {
+  const _PilihTema({required this.gelap, required this.onGanti});
+
+  final bool gelap;
+  final ValueChanged<bool> onGanti;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Expanded(
+          child: _Tombol(
+            ikon: Icons.light_mode_rounded,
+            label: 'Terang',
+            aktif: !gelap,
+            onTap: () => onGanti(false),
+          ),
+        ),
+        const SizedBox(width: 8),
+        Expanded(
+          child: _Tombol(
+            ikon: Icons.dark_mode_rounded,
+            label: 'Gelap',
+            aktif: gelap,
+            onTap: () => onGanti(true),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _Tombol extends StatelessWidget {
+  const _Tombol({
+    required this.ikon,
+    required this.label,
+    required this.aktif,
+    required this.onTap,
+  });
+
+  final IconData ikon;
+  final String label;
+  final bool aktif;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return ClaySurface(
+      sunken: aktif,
+      depth: 0.5,
+      radius: ClayTheme.radiusSmall,
+      color: aktif ? ClayTheme.primarySoft : ClayTheme.sidebarRow,
+      padding: const EdgeInsets.symmetric(vertical: 10),
+      onTap: aktif ? null : onTap,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(
+            ikon,
+            size: ClayTheme.icon,
+            color: aktif ? ClayTheme.primary : ClayTheme.textMuted,
+          ),
+          const SizedBox(height: 4),
+          Text(
+            label,
+            style: TextStyle(
+              fontSize: 10.5,
+              fontWeight: aktif ? FontWeight.w800 : FontWeight.w600,
+              color: aktif ? ClayTheme.primary : ClayTheme.textMuted,
+            ),
+          ),
+        ],
       ),
     );
   }

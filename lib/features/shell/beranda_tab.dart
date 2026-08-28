@@ -87,10 +87,10 @@ class BerandaTab extends StatelessWidget {
             padding: const EdgeInsets.all(16),
             child: Row(
               children: [
-                const Icon(Icons.auto_awesome_rounded,
+                Icon(Icons.auto_awesome_rounded,
                     size: 18, color: ClayTheme.textMuted),
                 const SizedBox(width: 11),
-                const Expanded(
+                Expanded(
                   child: Text(
                     'Layanan lain dari lingkungan Pemerintah Provinsi Sumatera '
                     'Utara akan ditambahkan ke Jargon GO secara bertahap.',
@@ -120,7 +120,7 @@ class _SectionLabel extends StatelessWidget {
         padding: const EdgeInsets.only(left: 6, top: 14, bottom: 12),
         child: Text(
           text.toUpperCase(),
-          style: const TextStyle(
+          style: TextStyle(
             color: ClayTheme.textMuted,
             fontSize: 11,
             fontWeight: FontWeight.w800,
@@ -161,7 +161,7 @@ class _StudentCard extends StatelessWidget {
                   children: [
                     Text(
                       student.isSelf ? 'Saya' : student.fullName,
-                      style: const TextStyle(
+                      style: TextStyle(
                         color: ClayTheme.textStrong,
                         fontSize: 15.5,
                         fontWeight: FontWeight.w800,
@@ -175,7 +175,7 @@ class _StudentCard extends StatelessWidget {
                       ].join(' · '),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(
+                      style: TextStyle(
                         color: ClayTheme.textMuted,
                         fontSize: 11.5,
                       ),
@@ -250,7 +250,7 @@ class _StudentCard extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 6),
-          const Center(
+          Center(
             child: Text(
               'rekap bulan berjalan',
               style: TextStyle(color: ClayTheme.textMuted, fontSize: 10.5),
@@ -290,7 +290,7 @@ class _TimeBox extends StatelessWidget {
               const SizedBox(width: 6),
               Text(
                 label,
-                style: const TextStyle(
+                style: TextStyle(
                   color: ClayTheme.textMuted,
                   fontSize: 10.5,
                   fontWeight: FontWeight.w700,
@@ -339,7 +339,7 @@ class _MiniStat extends StatelessWidget {
           const SizedBox(height: 2),
           Text(
             label,
-            style: const TextStyle(
+            style: TextStyle(
               color: ClayTheme.textMuted,
               fontSize: 10.5,
               fontWeight: FontWeight.w600,
@@ -371,7 +371,7 @@ class _SchoolCard extends StatelessWidget {
               Expanded(
                 child: Text(
                   school.schoolName,
-                  style: const TextStyle(
+                  style: TextStyle(
                     color: ClayTheme.textStrong,
                     fontSize: 15,
                     fontWeight: FontWeight.w800,
@@ -391,7 +391,7 @@ class _SchoolCard extends StatelessWidget {
           const SizedBox(height: 4),
           Text(
             'tingkat kehadiran dari ${school.totalStudents} siswa aktif',
-            style: const TextStyle(color: ClayTheme.textMuted, fontSize: 11.5),
+            style: TextStyle(color: ClayTheme.textMuted, fontSize: 11.5),
           ),
           const SizedBox(height: 16),
           ClipRRect(
@@ -448,28 +448,28 @@ class _AlertRow extends StatelessWidget {
   Widget build(BuildContext context) {
     return ClaySurface(
       margin: const EdgeInsets.only(bottom: 12),
-      padding: const EdgeInsets.all(15),
+      padding: EdgeInsets.all(15),
       depth: 0.75,
       child: Row(
         children: [
           ClayIcon(icon: icon, color: color, background: background, size: 19, padding: 11),
-          const SizedBox(width: 13),
+          SizedBox(width: 13),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   title,
-                  style: const TextStyle(
+                  style: TextStyle(
                     color: ClayTheme.textStrong,
                     fontSize: 13.5,
                     fontWeight: FontWeight.w700,
                   ),
                 ),
-                const SizedBox(height: 2),
+                SizedBox(height: 2),
                 Text(
                   subtitle,
-                  style: const TextStyle(
+                  style: TextStyle(
                     color: ClayTheme.textMuted,
                     fontSize: 11.5,
                     height: 1.4,
@@ -489,7 +489,13 @@ class _MenuGrid extends StatelessWidget {
 
   final List<String> menus;
 
-  static const _meta = {
+  /// Metadata menu. Getter, bukan `static const`: nilainya memuat warna
+  /// tema yang kini ditentukan saat berjalan, bukan saat kompilasi.
+  ///
+  /// Konsekuensi yang disengaja: peta ini dibangun ulang setiap build. Isinya
+  /// empat entri, jadi biayanya tidak terukur — dan alternatifnya adalah
+  /// warna yang tidak ikut berubah saat tema diganti.
+  static Map<String, (IconData, String, String, Color, Color)> get _meta => {
     'absensi': (
       Icons.fact_check_rounded,
       'Absensi',
@@ -538,7 +544,7 @@ class _MenuGrid extends StatelessWidget {
                 children: [
                   Text(
                     title,
-                    style: const TextStyle(
+                    style: TextStyle(
                       color: ClayTheme.textStrong,
                       fontSize: 14,
                       fontWeight: FontWeight.w800,
@@ -547,7 +553,7 @@ class _MenuGrid extends StatelessWidget {
                   const SizedBox(height: 2),
                   Text(
                     subtitle,
-                    style: const TextStyle(
+                    style: TextStyle(
                       color: ClayTheme.textMuted,
                       fontSize: 11,
                     ),

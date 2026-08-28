@@ -114,6 +114,20 @@ class Storage {
 
   Future<void> clearUserProfile() => _prefs.remove(_kUserProfile);
 
+  // ---------------- Pilihan tampilan ----------------
+
+  static const _kTemaGelap = 'tema_gelap';
+
+  /// Pilihan tema pengguna. `null` bila belum pernah memilih.
+  ///
+  /// Dibaca SINKRON dari SharedPreferences yang sudah dimuat, bukan Future:
+  /// tema harus sudah benar pada frame PERTAMA. Membacanya secara asinkron
+  /// membuat aplikasi berkedip dari terang ke gelap saat dibuka.
+  bool? temaGelap() => _prefs.getBool(_kTemaGelap);
+
+  Future<void> simpanTemaGelap(bool gelap) =>
+      _prefs.setBool(_kTemaGelap, gelap);
+
   // ---------------- Alamat server ----------------
 
   static const _kApiBaseUrl = 'api_base_url';

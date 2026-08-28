@@ -24,7 +24,7 @@ Future<void> main() async {
 
   // Bilah status menyatu dengan latar clay; ikonnya digelapkan karena
   // latarnya terang.
-  SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+  SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
     statusBarColor: Colors.transparent,
     statusBarIconBrightness: Brightness.dark,
     systemNavigationBarColor: ClayTheme.background,
@@ -109,7 +109,29 @@ class _JargonAppState extends ConsumerState<JargonApp> {
     // perlu login ulang setiap membuka aplikasi.
     final user = ref.watch(currentUserProvider);
 
-    return MaterialApp(
+    // Tema dipasang ke state statis SEBELUM `ClayTheme.build()` di bawah
+    // membacanya.
+    //
+    // Ya, ini efek samping di dalam build — dan itu disengaja. Warna dibaca
+    // lewat getter statis oleh 298 tempat di aplikasi, jadi nilai statis itu
+    // harus sudah benar sebelum satu pun widget dibangun. Menaruhnya di
+    // initState tidak cukup: build inilah yang berjalan ulang ketika
+    // penggunanya mengganti tema.
+    final gelap = ref.watch(temaGelapProvider);
+    ClayTheme.pakai(gelap: gelap);
+
+    return AnnotatedRegion<SystemUiOverlayStyle>(
+      // Ikon bilah status harus BERLAWANAN dengan latar: terang di tema
+      // gelap, gelap di tema terang. Nilai yang dipasang sekali di `main()`
+      // menjadi salah begitu tema bisa diganti saat berjalan.
+      value: SystemUiOverlayStyle(
+        statusBarColor: Colors.transparent,
+        statusBarIconBrightness: gelap ? Brightness.light : Brightness.dark,
+        systemNavigationBarColor: ClayTheme.background,
+        systemNavigationBarIconBrightness:
+            gelap ? Brightness.light : Brightness.dark,
+      ),
+      child: MaterialApp(
       title: 'Jargon GO',
       navigatorKey: navigatorKey,
       debugShowCheckedModeBanner: false,
@@ -122,6 +144,7 @@ class _JargonAppState extends ConsumerState<JargonApp> {
       ],
       theme: ClayTheme.build(),
       home: user == null ? const LoginScreen() : const HomeShell(),
+      ),
     );
   }
 }

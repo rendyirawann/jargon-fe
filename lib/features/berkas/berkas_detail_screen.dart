@@ -178,7 +178,7 @@ class _BerkasDetailScreenState extends ConsumerState<BerkasDetailScreen> {
                             const SizedBox(height: 9),
                             Text(
                               detail.reviewNote!,
-                              style: const TextStyle(
+                              style: TextStyle(
                                 color: ClayTheme.textBody,
                                 fontSize: 12.5,
                                 height: 1.5,
@@ -212,7 +212,7 @@ class _BerkasDetailScreenState extends ConsumerState<BerkasDetailScreen> {
                           child: Row(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              const Icon(Icons.info_outline_rounded,
+                              Icon(Icons.info_outline_rounded,
                                   size: 18, color: ClayTheme.warning),
                               const SizedBox(width: 11),
                               Expanded(
@@ -220,7 +220,7 @@ class _BerkasDetailScreenState extends ConsumerState<BerkasDetailScreen> {
                                   'Masih kurang ${detail.missingRequired.length} '
                                   'dokumen wajib: '
                                   '${detail.missingRequired.map((c) => c.name).join(', ')}.',
-                                  style: const TextStyle(
+                                  style: TextStyle(
                                     color: ClayTheme.textBody,
                                     fontSize: 11.5,
                                     height: 1.5,
@@ -238,7 +238,7 @@ class _BerkasDetailScreenState extends ConsumerState<BerkasDetailScreen> {
                       ),
                       if (!detail.canSubmit) ...[
                         const SizedBox(height: 10),
-                        const Text(
+                        Text(
                           'Lengkapi seluruh dokumen wajib untuk dapat mengajukan.',
                           textAlign: TextAlign.center,
                           style: TextStyle(
@@ -265,7 +265,7 @@ class _BerkasDetailScreenState extends ConsumerState<BerkasDetailScreen> {
                                           width: 8,
                                           height: 8,
                                           margin: const EdgeInsets.only(top: 5),
-                                          decoration: const BoxDecoration(
+                                          decoration: BoxDecoration(
                                             color: ClayTheme.primary,
                                             shape: BoxShape.circle,
                                           ),
@@ -278,7 +278,7 @@ class _BerkasDetailScreenState extends ConsumerState<BerkasDetailScreen> {
                                             children: [
                                               Text(
                                                 e.note ?? e.status,
-                                                style: const TextStyle(
+                                                style: TextStyle(
                                                   color: ClayTheme.textBody,
                                                   fontSize: 12.5,
                                                   height: 1.45,
@@ -291,7 +291,7 @@ class _BerkasDetailScreenState extends ConsumerState<BerkasDetailScreen> {
                                                     e.actorLabel!,
                                                   '${e.createdAt.day}/${e.createdAt.month}/${e.createdAt.year}',
                                                 ].join(' · '),
-                                                style: const TextStyle(
+                                                style: TextStyle(
                                                   color: ClayTheme.textMuted,
                                                   fontSize: 10.5,
                                                 ),
@@ -331,7 +331,7 @@ class _HeaderCard extends StatelessWidget {
         children: [
           Text(
             s.title,
-            style: const TextStyle(
+            style: TextStyle(
               color: ClayTheme.textStrong,
               fontSize: 17,
               fontWeight: FontWeight.w900,
@@ -344,7 +344,7 @@ class _HeaderCard extends StatelessWidget {
               Submission.purposeLabel(s.purpose),
               if (s.period != null) s.period!,
             ].join(' · '),
-            style: const TextStyle(color: ClayTheme.textMuted, fontSize: 12),
+            style: TextStyle(color: ClayTheme.textMuted, fontSize: 12),
           ),
           const SizedBox(height: 16),
           ClayBadge(
@@ -374,7 +374,7 @@ class _HeaderCard extends StatelessWidget {
               const SizedBox(width: 13),
               Text(
                 '$done/$total wajib',
-                style: const TextStyle(
+                style: TextStyle(
                   color: ClayTheme.textBody,
                   fontSize: 12,
                   fontWeight: FontWeight.w700,
@@ -440,7 +440,7 @@ class _ChecklistCard extends StatelessWidget {
                         Flexible(
                           child: Text(
                             item.name,
-                            style: const TextStyle(
+                            style: TextStyle(
                               color: ClayTheme.textStrong,
                               fontSize: 13.5,
                               fontWeight: FontWeight.w700,
@@ -449,7 +449,7 @@ class _ChecklistCard extends StatelessWidget {
                         ),
                         if (item.isRequired) ...[
                           const SizedBox(width: 6),
-                          const Text(
+                          Text(
                             '*',
                             style: TextStyle(
                               color: ClayTheme.danger,
@@ -463,7 +463,7 @@ class _ChecklistCard extends StatelessWidget {
                       const SizedBox(height: 3),
                       Text(
                         item.description!,
-                        style: const TextStyle(
+                        style: TextStyle(
                           color: ClayTheme.textMuted,
                           fontSize: 11,
                           height: 1.4,
@@ -502,13 +502,13 @@ class _ChecklistCard extends StatelessWidget {
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Icon(Icons.error_outline_rounded,
+                  Icon(Icons.error_outline_rounded,
                       size: 15, color: ClayTheme.danger),
                   const SizedBox(width: 9),
                   Expanded(
                     child: Text(
                       item.rejectReason!,
-                      style: const TextStyle(
+                      style: TextStyle(
                         color: ClayTheme.danger,
                         fontSize: 11.5,
                         height: 1.45,
@@ -536,7 +536,7 @@ class _SectionTitle extends StatelessWidget {
         padding: const EdgeInsets.only(left: 6, bottom: 12),
         child: Text(
           text.toUpperCase(),
-          style: const TextStyle(
+          style: TextStyle(
             color: ClayTheme.textMuted,
             fontSize: 11,
             fontWeight: FontWeight.w800,
